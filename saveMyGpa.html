@@ -44,6 +44,7 @@
     </div>
     <div class="jumbotron mb-0 bg-light">
         <h1>Grade Prediction</h1>
+        <h5>Select Subject and Course Number</h5>
         <div class="table table-sm">
             <table class="table">
                 <thead>
@@ -51,7 +52,6 @@
                     <th class="col-0"></th>
                     <th class="col-2">Subject</th>
                     <th class="col-2">Course Number</th>
-                    <th class="col-2"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -263,15 +263,12 @@
                             Interactive list of course numbers based on Subject. 
                             Might be using javascript for it
                         </td>
-                        <td class="col-2">
-                            <button type="button" class="btn btn-danger float-right">Clear</button>
-                            <button type="button" class="btn btn-primary float-right">Search</button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <h4>Expected Grade</h4>
+        <h5>Expected Grade</h5>
+        Show the expected grade interactively as selections are made
         <input type="text" class="form-control col-1" id="expectedGrade" placeholder="Grade">
     </div>
     <div class="jumbotron mb-0">
@@ -305,7 +302,7 @@
                 </tbody>
             </table>
         </div>
-        <h4>Add Courses</h4>
+        <h5>Add Courses</h5>
         <div class="table table-sm">
             <table class="table">
                 <thead>
