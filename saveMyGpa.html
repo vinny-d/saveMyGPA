@@ -10,10 +10,11 @@
   <body>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="src/functionality.js"></script>
 
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-dark h-100" style="background-color: #13294b;">
-            <a class="navbar-brand" href="https://wiki.illinois.edu/wiki/display/CS411AAFA20/Team+107">
+            <a class="navbar-brand">
                 <img class="align-top" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Illinois_Fighting_Illini_logo.svg" width="20px" height="29px" alt="...">
                 saveMyGpa
             </a>
@@ -23,10 +24,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="https://wiki.illinois.edu/wiki/display/CS411AAFA20/Team+107">Project Page</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Documents</a>
@@ -268,8 +269,10 @@
             </table>
         </div>
         <h5>Expected Grade</h5>
-        Show the expected grade interactively as selections are made
-        <input type="text" class="form-control col-1" id="expectedGrade" placeholder="Grade">
+        <div class="ml-2">
+            Show the expected grade interactively as selections are made
+            <input type="text" class="form-control col-1" id="expectedGrade" placeholder="Grade">
+        </div>
     </div>
     <div class="jumbotron mb-0">
         <h1>Academic History</h1>
@@ -563,7 +566,22 @@
                             <select class="browser-default custom-select" style="width:auto;"></select>
                         </td>
                         <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;"></select>
+                            <select class="browser-default custom-select" style="width:auto;">
+                                <OPTION VALUE="A+">A+</OPTION>
+                                <OPTION VALUE="A">A</OPTION>
+                                <OPTION VALUE="A-">A-</OPTION>
+                                <OPTION VALUE="B+">B+</OPTION>
+                                <OPTION VALUE="B">B</OPTION>
+                                <OPTION VALUE="B-">B-</OPTION>
+                                <OPTION VALUE="C+">C+</OPTION>
+                                <OPTION VALUE="C">C</OPTION>
+                                <OPTION VALUE="C-">C-</OPTION>
+                                <OPTION VALUE="D+">D+</OPTION>
+                                <OPTION VALUE="D">D</OPTION>
+                                <OPTION VALUE="D-">D-</OPTION>
+                                <OPTION VALUE="W">W</OPTION>
+                                <OPTION VALUE="F">F</OPTION>
+                            </select>
                         </td>
                         <td class="col-2">
                             <button type="button" class="btn btn-primary">Add</button>
@@ -574,9 +592,41 @@
             </table>
         </div>
     </div>
-    <div class="jumbotron mb-0 bg-info">
+    <div class="jumbotron mb-0 bg-info" id="about">
         <h1>About</h1>
-        Net id, name and email etc.
+        <p>This webapp is made by</p>
+        <table >
+            <thead>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-6"></th>
+                    <th class="col-3"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-6">Steven Pan</th>
+                    <th class="col-3">stevenp6@illinois.edu</th>
+                </tr>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-6">Vinayak Dhanawade</th>
+                    <th class="col-3">vinayak2@illinois.edu</th>
+                </tr>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-6">Rohan Vasavada</th>
+                    <th class="col-3">rdv2@illinois.edu</th>
+                </tr>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-6">Kevin Choi</th>
+                    <th class="col-3">gchoi17@illinois.edu</th>
+                </tr>
+            </tbody>
+        </table>
+        &nbsp;<p>as an in-class project for CS 411 at UIUC</p>
     </div>
   </body>
 </html>
