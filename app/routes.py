@@ -38,8 +38,8 @@ def read():
     else:
         return None
 
-@app.route('/insert', methods=['POST', 'GET'])
-def insert():
+@app.route('/increment', methods=['POST', 'GET'])
+def increment():
     subjects = db.get_subjects()
     subjectI = request.form['subjectI']
     courseNumberI = request.form['courseNumberI']
@@ -62,7 +62,7 @@ def insert():
     if gradeI not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         wRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, wRes=wRes)
-    res = db.insert_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
+    res = db.increment_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
     if res == 1: 
         wRes = "Successfully wrote data"
     elif res == -1: 
@@ -71,8 +71,8 @@ def insert():
         wRes = "Such course does not exist. Change subject or course number"
     return render_template('index.html', subjects=subjects, wRes=wRes)
 
-@app.route('/delete', methods=['POST', 'GET'])
-def delete():
+@app.route('/decrement', methods=['POST', 'GET'])
+def decrement():
     subjects = db.get_subjects()
     subjectD = request.form['subjectD']
     courseNumberD = request.form['courseNumberD']
@@ -95,7 +95,7 @@ def delete():
     if gradeD not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         dRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, dRes=dRes)
-    res = db.delete_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
+    res = db.decrement_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
     if res == 1: 
         dRes = "Successfully deleted data"
     elif res == -1: 
@@ -103,3 +103,27 @@ def delete():
     else:
         dRes = "Such course does not exist. Change subject or course number"
     return render_template('index.html', subjects=subjects, dRes=dRes)
+
+@app.route('/addProf', methods=['POST', 'GET'])
+def addProf():
+    subjects = db.get_subjects()
+    firstName = request.form['profFN']
+    lastName = request.form['profLN']
+    if firstName.isalpha() == False or lastName.isalpha() == False:
+        apRes = "Put correct name"
+        return render_template('index.html', subjects=subjects, apRes=apRes)
+    db.add_professor(firstName, lastName)
+    apRes = "Professor successfully added"
+    return render_template('index.html', subjects=subjects, apRes=apRes)
+
+@app.route('/deleteProf', methods=['POST', 'GET'])
+def deleteProf():
+    subjects = db.get_subjects()
+    firstName = request.form['profFND']
+    lastName = request.form['profLND']
+    if firstName.isalpha() == False or lastName.isalpha() == False:
+        dpRes = "Put correct name"
+        return render_template('index.html', subjects=subjects, dpRes=dpRes)
+    db.delete_professor(firstName, lastName)
+    dpRes = "Professor successfully added"
+    return render_template('index.html', subjects=subjects, dpRes=dpRes)

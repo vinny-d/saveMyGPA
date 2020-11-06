@@ -117,7 +117,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get CRNs</button>
+                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
                             </td>
                             <td class="col-2">
                                 <select name="CRN" class="browser-default custom-select col-5">
@@ -207,7 +207,7 @@
             </table>
         </div>
         &nbsp;
-        <h5>Add Your Grade (Only works for existing sections for now)</h5>
+        <h5>Increment Grade</h5>
         <div class="table table-sm">
             <table class="table">
                 <thead>
@@ -222,7 +222,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <form class="form-inline" method="POST" action="/insert">
+                    <form class="form-inline" method="POST" action="/increment">
                         <tr class="d-flex">
                             <td class="col-0">
                             </td>
@@ -242,7 +242,7 @@
                                 <input type="text" class="form-control" name="gradeI" placeholder="A, A-, etc.">
                             </td>
                             <td class="col-md-1">
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Add</button>
+                                <button type="submit" class="btn btn-primary ml-2 col-auto">Increment</button>
                             </td>
                         </tr>
                     </form>
@@ -251,7 +251,7 @@
             {{wRes}}
         </div>
         &nbsp;
-        <h5>Delete Your Grade (Only works for existing sections for now)</h5>
+        <h5>Decrement Grade</h5>
         <div class="table table-sm">
             <table class="table">
                 <thead>
@@ -266,7 +266,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <form class="form-inline" method="POST" action="/delete">
+                    <form class="form-inline" method="POST" action="/decrement">
                         <tr class="d-flex">
                             <td class="col-0">
                             </td>
@@ -286,13 +286,75 @@
                                 <input type="text" class="form-control" name="gradeD" placeholder="A, A-, etc.">
                             </td>
                             <td class="col-md-1">
-                                <button type="submit" class="btn btn-danger ml-2 col-auto">Delete</button>
+                                <button type="submit" class="btn btn-danger ml-2 col-auto">Decrement</button>
                             </td>
                         </tr>
                     </form>
                 </tbody>
             </table>
             {{dRes}}
+        </div>
+        &nbsp;
+        <h5>Add Professor</h5>
+        <div class="table table-sm">
+            <table class="table">
+                <thead>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-2">First Name</th>
+                    <th class="col-2">Last Name</th>
+                    <th class="col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="d-flex">
+                        <form class="form-inline" method="POST" action="/addProf">
+                            <td class="col-0"></td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="profFN">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="profLN">
+                            </td>
+                            <td class="col-2">
+                                <button type="submit" class="btn btn-primary ml-2 col-auto">Add</button>
+                            </td>
+                        </form>
+                    </tr>
+                </tbody>
+            </table>
+            {{apRes}}
+        </div>
+        &nbsp;
+        <h5>Delete Professor</h5>
+        <div class="table table-sm">
+            <table class="table">
+                <thead>
+                <tr class="d-flex">
+                    <th class="col-0"></th>
+                    <th class="col-2">First Name</th>
+                    <th class="col-2">Last Name</th>
+                    <th class="col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="d-flex">
+                        <form class="form-inline" method="POST" action="/deleteProf">
+                            <td class="col-0"></td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="profFND">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="profLND">
+                            </td>
+                            <td class="col-2">
+                                <button type="submit" class="btn btn-danger ml-2 col-auto">Delete</button>
+                            </td>
+                        </form>
+                    </tr>
+                </tbody>
+            </table>
+            {{dpRes}}
         </div>
     </div>
         <!-- <div class="table table-sm">

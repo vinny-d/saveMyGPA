@@ -68,7 +68,7 @@ def get_sectionInfos(deptCode, CRN):
     sectionInfos = cur.fetchall()
     return sectionInfos
 
-def insert_section(subject, courseNumber, sectionId, term, grade):
+def increment_section(subject, courseNumber, sectionId, term, grade):
     cur = conn.cursor()
     cur.execute("select courseId from Course where departmentCode = %s and courseNumber = %s", (subject, courseNumber))
     details = cur.fetchall()
@@ -97,7 +97,7 @@ def insert_section(subject, courseNumber, sectionId, term, grade):
         conn.commit()
     return 1
 
-def delete_section(subject, courseNumber, sectionId, term, grade):
+def decrement_section(subject, courseNumber, sectionId, term, grade):
     cur = conn.cursor()
     cur.execute("select courseId from Course where departmentCode = %s and courseNumber = %s", (subject, courseNumber))
     details = cur.fetchall()
@@ -115,10 +115,25 @@ def delete_section(subject, courseNumber, sectionId, term, grade):
         conn.commit()
     return 1
 
+def add_professor(firstName, lastName):
+    cur = conn.cursor()
+    cur.execute("insert into Professor (firstName, lastName) values (%s, %s)", (firstName, lastName))
+    conn.commit()
+
+def delete_professor(firstName, lastName):
+    cur = conn.cursor()
+    cur.execute("delete from Professor where firstName = %s and lastName = %s", (firstName, lastName))
+    conn.commit()
 
 def access_data():
     cur = conn.cursor()
-    cur.execute("describe Section")
+    cur.execute("describe Professor")
+    details = cur.fetchall()
+    return details
+
+def check_professor():
+    cur = conn.cursor()
+    cur.execute("select * from Professor where firstName = 'Steven' and lastName = 'Pan'")
     details = cur.fetchall()
     return details
 
@@ -127,3 +142,4 @@ def access_data():
 # print(access_data())
 # print(get_CRNs('IS'))
 # get_grade('ECE', 110)
+# print(check_professor())
