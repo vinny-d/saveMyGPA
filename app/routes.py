@@ -1,5 +1,6 @@
 from flask import render_template, url_for, request
 import sys
+import re
 from app import app
 from app import rds_db as db
 
@@ -56,15 +57,16 @@ def increment():
     if sectionIdI.isnumeric() == False:
         wRes = "Put correct section ID"
         return render_template('index.html', subjects=subjects, wRes=wRes)
-    if termI not in ['Spring', 'Fall', 'Summer', 'Winter']:
-        wRes = "Put correct term (first character must be capitalized)"
+    termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
+    if re.match(termPattern, termI) == None:
+        wRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
         return render_template('index.html', subjects=subjects, wRes=wRes)
     if gradeI not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         wRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, wRes=wRes)
     res = db.increment_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
     if res == 1: 
-        wRes = "Successfully wrote data"
+        wRes = "Successfully incremented grade"
     elif res == -1: 
         wRes = "Such section does not exist. Change sectionId"
     else:
@@ -89,15 +91,16 @@ def decrement():
     if sectionIdD.isnumeric() == False:
         dRes = "Put correct section ID"
         return render_template('index.html', subjects=subjects, dRes=dRes)
-    if termD not in ['Spring', 'Fall', 'Summer', 'Winter']:
-        dRes = "Put correct term (first character must be capitalized)"
+    termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
+    if re.match(termPattern, termD) == None:
+        dRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
         return render_template('index.html', subjects=subjects, dRes=dRes)
     if gradeD not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         dRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, dRes=dRes)
     res = db.decrement_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
     if res == 1: 
-        dRes = "Successfully deleted data"
+        dRes = "Successfully decremented grade"
     elif res == -1: 
         dRes = "Such section does not exist. Change sectionId"
     else:

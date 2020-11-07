@@ -78,17 +78,6 @@ def increment_section(subject, courseNumber, sectionId, term, grade):
     secDetails = cur.fetchall()
     if len(secDetails) == 0:
         return -1
-        # cur.execute("select courseId, professorId from Section where courseId = %s", details[0][0])
-        # print(secDetails, file=sys.stderr)
-        # secDetails = cur.fetchall()
-        # print(secDetails, file=sys.stderr)
-        # if len(secDetails) == 0:
-        #     return -1
-        # gradeStr = grade.replace('-', 'Minus')
-        # gradeStr = gradeStr.replace('+', 'Plus')
-        # gradeStr = "Grade" + gradeStr
-        # cur.execute("insert into Section (courseId, professorId, sectionId, term, %s) values (%s, %s, %s, %s, 1)", (gradeStr, secDetails[0][0], secDetails[0][1], sectionId, term))
-        # cur.commit()
     else:
         gradeStr = grade.replace('-', 'Minus')
         gradeStr = gradeStr.replace('+', 'Plus')
@@ -127,7 +116,7 @@ def delete_professor(firstName, lastName):
 
 def access_data():
     cur = conn.cursor()
-    cur.execute("describe Professor")
+    cur.execute("describe Section")
     details = cur.fetchall()
     return details
 

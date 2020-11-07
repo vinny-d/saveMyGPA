@@ -161,48 +161,50 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% for sectionInfo in sectionInfos %}
-                        <tr class="d-flex">
-                            <td class="col-0">
-                            </td>
-                            <td class="col-md-1">{{sectionInfo[0]}}
-                            </td>
-                            <td class="col-md-1">{{sectionInfo[1]}}
-                            </td>
-                            <td class="col-md-1">{{sectionInfo[2]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[3]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[4]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[5]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[6]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[7]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[8]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[9]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[10]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[11]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[12]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[13]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[14]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[15]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[16]}}
-                            </td>
-                            <td class="col-sm-1">{{sectionInfo[17]}}
-                            </td>
-                        </tr>
-                    {% endfor %}
+                    {% if sectionInfos %}
+                        {% for sectionInfo in sectionInfos %}
+                            <tr class="d-flex">
+                                <td class="col-0">
+                                </td>
+                                <td class="col-md-1">{{sectionInfo[0]}}
+                                </td>
+                                <td class="col-md-1">{{sectionInfo[1]}}
+                                </td>
+                                <td class="col-md-1">{{sectionInfo[2]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[3]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[4]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[5]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[6]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[7]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[8]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[9]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[10]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[11]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[12]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[13]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[14]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[15]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[16]}}
+                                </td>
+                                <td class="col-sm-1">{{sectionInfo[17]}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
