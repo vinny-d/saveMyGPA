@@ -1,6 +1,8 @@
 from flask import render_template, url_for, request
 import sys
 import re
+import os
+import time
 from app import app
 from app import rds_db as db
 
@@ -107,7 +109,7 @@ def decrement():
         dRes = "Such course does not exist. Change subject or course number"
     return render_template('index.html', subjects=subjects, dRes=dRes)
 
-@app.route('/addProf', methods=['POST', 'GET'])
+@app.route('/addProf', methods=['GET'])
 def addProf():
     subjects = db.get_subjects()
     firstName = request.form['profFN']
@@ -119,7 +121,7 @@ def addProf():
     apRes = "Professor successfully added"
     return render_template('index.html', subjects=subjects, apRes=apRes)
 
-@app.route('/deleteProf', methods=['POST', 'GET'])
+@app.route('/deleteProf', methods=['GET'])
 def deleteProf():
     subjects = db.get_subjects()
     firstName = request.form['profFND']
@@ -130,3 +132,7 @@ def deleteProf():
     db.delete_professor(firstName, lastName)
     dpRes = "Professor successfully added"
     return render_template('index.html', subjects=subjects, dpRes=dpRes)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    return render_template('login.html')

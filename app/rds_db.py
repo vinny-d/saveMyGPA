@@ -1,4 +1,5 @@
 import pymysql
+import pyrebase
 import sys
 
 conn = pymysql.connect(
@@ -8,6 +9,16 @@ conn = pymysql.connect(
     password = 'ForTeam107',
     db = 'savemygpa',
 )
+
+firebaseConfig = {
+    "apiKey": "AIzaSyAcxxRO8Sqf7m8F9NkUI6-9MPdWrZkYgGs",
+    "authDomain": "savemygpa-7912d.firebaseapp.com",
+    "databaseURL": "https://savemygpa-7912d.firebaseio.com",
+    "projectId": "savemygpa-7912d",
+    "storageBucket": "savemygpa-7912d.appspot.com",
+    "messagingSenderId": "781502539376",
+    "appId": "1:781502539376:web:7618817f841ef51f9b36b5"
+}
 
 def get_subjects():
     cur = conn.cursor()
@@ -125,6 +136,13 @@ def check_professor():
     cur.execute("select * from Professor where firstName = 'Steven' and lastName = 'Pan'")
     details = cur.fetchall()
     return details
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+auth = firebase.auth()
+# newuser = auth.create_user_with_email_and_password('gchoi17@illinois.edu', 'Team107')
+user = auth.sign_in_with_email_and_password('gchoi17@illinois.edu', 'Team107')
+db = firebase.database()
+students = db.child("students").get()
 
 # print(get_subjects())
 # get_subjects()
