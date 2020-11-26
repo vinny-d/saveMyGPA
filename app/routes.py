@@ -138,11 +138,6 @@ def deleteProf():
 def login():
     return render_template('login.html')
 
-@app.route("/test")
-def test():
-    mdb.collection.insert_one({"name": "John"})
-    return "Connected to the data base!"
-
 CONNECTION_STRING = 'mongodb://admin:ForTeam107@cluster0-shard-00-00.skio4.mongodb.net:27017,cluster0-shard-00-01.skio4.mongodb.net:27017,cluster0-shard-00-02.skio4.mongodb.net:27017/<saveMyGpa>?ssl=true&replicaSet=atlas-fvgrlg-shard-0&authSource=admin&retryWrites=true&w=majority'
 client = pymongo.MongoClient(CONNECTION_STRING)
 print("server version:", client.server_info()["version"])
