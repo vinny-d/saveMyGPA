@@ -134,12 +134,25 @@ def deleteProf():
     dpRes = "Professor successfully added"
     return render_template('index.html', subjects=subjects, dpRes=dpRes)
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/account', methods=['GET'])
+def account():
+    return render_template('account.html')
+
+@app.route('/login', methods=['POST'])
 def login():
-    return render_template('login.html')
+    return
+    # If successful, redirect to the main page and load the user's data on mongodb
+    # If not, send error and stay on the account page
+
+@app.route('/register', methods=['POST'])
+def register():
+    return
+    # If successful, redirect to the main page
+    # If not, send error and stay on the account page
 
 CONNECTION_STRING = 'mongodb://admin:ForTeam107@cluster0-shard-00-00.skio4.mongodb.net:27017,cluster0-shard-00-01.skio4.mongodb.net:27017,cluster0-shard-00-02.skio4.mongodb.net:27017/<saveMyGpa>?ssl=true&replicaSet=atlas-fvgrlg-shard-0&authSource=admin&retryWrites=true&w=majority'
 client = pymongo.MongoClient(CONNECTION_STRING)
-print("server version:", client.server_info()["version"])
+# print("server version:", client.server_info()["version"])
 mdb = client.get_database('<saveMyGpa>')
-print(mdb.list_collection_names())
+# mongodb connected here
+# print(mdb.list_collection_names())

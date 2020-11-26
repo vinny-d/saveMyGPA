@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="login">Login</a>
+                        <a class="nav-link" href="account">Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://wiki.illinois.edu/wiki/display/CS411AAFA20/Team+107">Project Page</a>
@@ -46,7 +46,96 @@
             </div>
         </nav>
     </div>
-    <div class="jumbotron mb-0 bg-light">
+    <div class="jumbotron mb-0" style="background-color: #ffffff;">
+        <h1>Academic History</h1>
+        <div class="table table-sm text-center">
+            <table class="table">
+                <thead>
+                    <tr class="row">
+                        <th style="width: 4%;">#</th>
+                        <th class="col-md-2">Term</th>
+                        <th class="col-md-2">Subject</th>
+                        <th class="col-md-2">Course Number</th>
+                        <th class="col-md-2">Instructor</th>
+                        <th class="col-md-2">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- nested array records will contain user academic history
+                    i.e. each record is an array with the values listed above in the table head -->
+                    {% for record in records %}
+                        <tr class="row">
+                            <td style="width: 4%;">{{record[0]}}</th>
+                            <td class="col-md-2">{{record[1]}}</th>
+                            <td class="col-md-2">{{record[2]}}</th>
+                            <td class="col-md-2">{{record[3]}}</th>
+                            <td class="col-md-2">{{record[4]}}</th>
+                            <td class="col-md-2">{{record[5]}}</th>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        &nbsp;
+        <h5>Add Courses</h5>
+        <div class="table table-sm text-center">
+            <table class="table">
+                <thead>
+                <tr class="row">
+                    <th class="col-0"></th>
+                    <th class="col-sm-2">Term</th>
+                    <th class="col-md-2">Subject</th>
+                    <th class="col-md-2">Course Number</th>
+                    <th class="col-md-2">Instructor</th>
+                    <th class="col-md-1">Grade</th>
+                    <th class="col-md-1"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <form class="form-inline" method="POST" action="/add">
+                        <tr class="row">
+                            <td class="col-0"></td>
+                            <td class="col-md-2">
+                                <input type="text" class="form-control" name="termA" placeholder="20xx-te, (te: sp, fa, su, wt)">
+                            </td>
+                            <td class="col-md-2">
+                                <input type="text" class="form-control" name="subjectA" placeholder="2 to 4 Capitalized Alphabet e.g.CS">
+                            </td>
+                            <td class="col-md-2">
+                                <input type="text" class="form-control" name="courseNumberA" placeholder="3-Digit Course Number e.g.100">
+                            </td>
+                            <td class="col-md-2">
+                                <input type="text" class="form-control" name="sectionIdA" placeholder="4-Digit SectionId (read from the editor)">
+                            </td>
+                            <td class="col-md-1">
+                                <select class="browser-default custom-select mr-2" style="width:auto;">
+                                    <OPTION VALUE="A+">A+</OPTION>
+                                    <OPTION VALUE="A">A</OPTION>
+                                    <OPTION VALUE="A-">A-</OPTION>
+                                    <OPTION VALUE="B+">B+</OPTION>
+                                    <OPTION VALUE="B">B</OPTION>
+                                    <OPTION VALUE="B-">B-</OPTION>
+                                    <OPTION VALUE="C+">C+</OPTION>
+                                    <OPTION VALUE="C">C</OPTION>
+                                    <OPTION VALUE="C-">C-</OPTION>
+                                    <OPTION VALUE="D+">D+</OPTION>
+                                    <OPTION VALUE="D">D</OPTION>
+                                    <OPTION VALUE="D-">D-</OPTION>
+                                    <OPTION VALUE="W">W</OPTION>
+                                    <OPTION VALUE="F">F</OPTION>
+                                </select>
+                            </td>
+                            <td class="col-md-1">
+                                <button type="button" class="btn btn-primary ml-2">Add</button>
+                            </td>
+                        </tr>
+                    </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="jumbotron mb-0" style="background-color:powderblue">
         <h1>Grade Prediction</h1>
         <h5>Select Subject and Course Number</h5>
         <div class="table table-sm">
@@ -96,7 +185,7 @@
             <input type="text" class="form-control col-1" id="expectedGrade" placeholder="{{grade}}">
         </div>
     </div>
-    <div class="jumbotron mb-0">
+    <div class="jumbotron mb-0" style="background-color: #afcbff;">
         <h1>Database Editor</h1>
         <h5>Read Section Data</h5>
         <div class="table table-sm">
@@ -134,78 +223,78 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Section Data</button>
+                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Section</button>
                             </td>
                         </form>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="table table-sm">
+        <div class="table table-sm text-center">
             <table class="table">
                 <thead>
-                <tr class="d-flex">
+                <tr class="row">
                     <th class="col-0"></th>
-                    <th class="col-md-1">CourseId</th>
-                    <th class="col-md-1">ProfessorId</th>
-                    <th class="col-md-1">sectionId</th>
-                    <th class="col-sm-1">Term</th>
-                    <th class="col-sm-1">A</th>
-                    <th class="col-sm-1">A-</th>
-                    <th class="col-sm-1">B+</th>
-                    <th class="col-sm-1">B</th>
-                    <th class="col-sm-1">B-</th>
-                    <th class="col-sm-1">C+</th>
-                    <th class="col-sm-1">C</th>
-                    <th class="col-sm-1">C-</th>
-                    <th class="col-sm-1">D+</th>
-                    <th class="col-sm-1">D</th>
-                    <th class="col-sm-1">D-</th>
-                    <th class="col-sm-1">F</th>
-                    <th class="col-sm-1">W</th>
+                    <th class="col-sm-1">CourseId</th>
+                    <th class="col-sm-1">ProfessorId</th>
+                    <th class="col-sm-1">sectionId</th>
+                    <th style="width: 8%">Term</th>
+                    <th style="width: 4%;">A</th>
+                    <th style="width: 4%;">A-</th>
+                    <th style="width: 4%;">B+</th>
+                    <th style="width: 4%;">B</th>
+                    <th style="width: 4%;">B-</th>
+                    <th style="width: 4%;">C+</th>
+                    <th style="width: 4%;">C</th>
+                    <th style="width: 4%;">C-</th>
+                    <th style="width: 4%;">D+</th>
+                    <th style="width: 4%;">D</th>
+                    <th style="width: 4%;">D-</th>
+                    <th style="width: 4%;">F</th>
+                    <th style="width: 4%;">W</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% if sectionInfos %}
                         {% for sectionInfo in sectionInfos %}
-                            <tr class="d-flex">
+                            <tr class="row">
                                 <td class="col-0">
                                 </td>
-                                <td class="col-md-1">{{sectionInfo[0]}}
+                                <td class="col-sm-1">{{sectionInfo[0]}}
                                 </td>
-                                <td class="col-md-1">{{sectionInfo[1]}}
+                                <td class="col-sm-1">{{sectionInfo[1]}}
                                 </td>
-                                <td class="col-md-1">{{sectionInfo[2]}}
+                                <td class="col-sm-1">{{sectionInfo[2]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[3]}}
+                                <td style="width: 8%;">{{sectionInfo[3]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[4]}}
+                                <td style="width: 4%;">{{sectionInfo[4]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[5]}}
+                                <td style="width: 4%;">{{sectionInfo[5]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[6]}}
+                                <td style="width: 4%;">{{sectionInfo[6]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[7]}}
+                                <td style="width: 4%;">{{sectionInfo[7]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[8]}}
+                                <td style="width: 4%;">{{sectionInfo[8]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[9]}}
+                                <td style="width: 4%;">{{sectionInfo[9]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[10]}}
+                                <td style="width: 4%;">{{sectionInfo[10]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[11]}}
+                                <td style="width: 4%;">{{sectionInfo[11]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[12]}}
+                                <td style="width: 4%;">{{sectionInfo[12]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[13]}}
+                                <td style="width: 4%;">{{sectionInfo[13]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[14]}}
+                                <td style="width: 4%;">{{sectionInfo[14]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[15]}}
+                                <td style="width: 4%;">{{sectionInfo[15]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[16]}}
+                                <td style="width: 4%;">{{sectionInfo[16]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[17]}}
+                                <td style="width: 4%;">{{sectionInfo[17]}}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -364,248 +453,6 @@
             {{dpRes}}
         </div>
     </div>
-        <!-- <div class="table table-sm">
-            <table class="table">
-                <thead>
-                <tr class="d-flex">
-                    <th class="col-0"></th>
-                    <th class="col-2">Term</th>
-                    <th class="col-2">Subject</th>
-                    <th class="col-2">Course Number</th>
-                    <th class="col-2">Instructor</th>
-                    <th class="col-2">Grade</th>
-                    <th class="col-2"></th>
-                </tr>
-                </thead>
-                <tbody>
-                    <form class="form-inline" method="POST" action="/grade">
-                    <tr class="d-flex">
-                        <td class="col-2">
-                            <select class="browser-default custom-select">
-                                <OPTION VALUE="120208">Fall 2020</OPTION>
-                                <OPTION VALUE="120205">Summer 2020</OPTION>
-                                <OPTION VALUE="120201">Spring 2020</OPTION>
-                                <OPTION VALUE="120200">Winter 2019-2020</OPTION>
-                                <OPTION VALUE="120198">Fall 2019</OPTION>
-                                <OPTION VALUE="120195">Summer 2019</OPTION>
-                                <OPTION VALUE="120191">Spring 2019</OPTION>
-                                <OPTION VALUE="120190">Winter 2018-2019</OPTION>
-                                <OPTION VALUE="120188">Fall 2018</OPTION>
-                                <OPTION VALUE="120185">Summer 2018</OPTION>
-                                <OPTION VALUE="120181">Spring 2018</OPTION>
-                                <OPTION VALUE="120180">Winter 2017-2018</OPTION>
-                                <OPTION VALUE="120178">Fall 2017</OPTION>
-                                <OPTION VALUE="120175">Summer 2017</OPTION>
-                                <OPTION VALUE="120171">Spring 2017</OPTION>
-                                <OPTION VALUE="120170">Winter 2016-2017</OPTION>
-                                <OPTION VALUE="120168">Fall 2016</OPTION>
-                                <OPTION VALUE="120165">Summer 2016</OPTION>
-                                <OPTION VALUE="120161">Spring 2016</OPTION>
-                                <OPTION VALUE="120160">Winter 2015-2016</OPTION>
-                                <OPTION VALUE="120158">Fall 2015</OPTION>
-                                <OPTION VALUE="120155">Summer 2015</OPTION>
-                                <OPTION VALUE="120151">Spring 2015</OPTION>
-                                <OPTION VALUE="120150">Winter 2014-2015</OPTION>
-                                <OPTION VALUE="120148">Fall 2014</OPTION>
-                                <OPTION VALUE="120145">Summer 2014</OPTION>
-                                <OPTION VALUE="120141">Spring 2014</OPTION>
-                                <OPTION VALUE="120138">Fall 2013</OPTION>
-                                <OPTION VALUE="120135">Summer 2013</OPTION>
-                                <OPTION VALUE="120131">Spring 2013</OPTION>
-                                <OPTION VALUE="120128">Fall 2012</OPTION>
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select">
-                                {% for subject in subjects %}
-                                    {% if subject == his_selected_subject %}
-                                        <option value="{{subject}}" selected>{{subject}}</option>
-                                    {% else %}
-                                        <option value="{{subject}}">{{subject}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;">
-                                {% for CRN in CRNs %}
-                                    {% if CRN == his_selected_CRN %}
-                                        <option value="{{CRN}}" selected>{{CRN}}</option>
-                                    {% else %}
-                                        <option value="{{CRN}}">{{CRN}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;"></select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;">
-                                <OPTION VALUE="A+">A+</OPTION>
-                                <OPTION VALUE="A">A</OPTION>
-                                <OPTION VALUE="A-">A-</OPTION>
-                                <OPTION VALUE="B+">B+</OPTION>
-                                <OPTION VALUE="B">B</OPTION>
-                                <OPTION VALUE="B-">B-</OPTION>
-                                <OPTION VALUE="C+">C+</OPTION>
-                                <OPTION VALUE="C">C</OPTION>
-                                <OPTION VALUE="C-">C-</OPTION>
-                                <OPTION VALUE="D+">D+</OPTION>
-                                <OPTION VALUE="D">D</OPTION>
-                                <OPTION VALUE="D-">D-</OPTION>
-                                <OPTION VALUE="W">W</OPTION>
-                                <OPTION VALUE="F">F</OPTION>
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <button type="button" class="btn btn-primary">Get CRNs</button>
-                            <button type="button" class="btn btn-primary">Get Instructors</button>
-                            <button type="button" class="btn btn-primary">Add</button>
-                        </td>
-                    </tr>
-                    </form>
-                </tbody>
-            </table>
-        </div>
-        </div> -->
-    <!-- <div class="jumbotron mb-0">
-        <h1>Academic History</h1>
-        <div class="table table-sm">
-            <table class="table">
-                <thead>
-                <tr class="d-flex">
-                    <th class="col-1">#</th>
-                    <th class="col-2">Term</th>
-                    <th class="col-2">Subject</th>
-                    <th class="col-2">Course Number</th>
-                    <th class="col-2">Instructor</th>
-                    <th class="col-2">Grade</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Will use localstorage to store information</th>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <h5>Add Courses</h5>
-        <div class="table table-sm">
-            <table class="table">
-                <thead>
-                <tr class="d-flex">
-                    <th class="col-0"></th>
-                    <th class="col-2">Term</th>
-                    <th class="col-2">Subject</th>
-                    <th class="col-2">Course Number</th>
-                    <th class="col-2">Instructor</th>
-                    <th class="col-2">Grade</th>
-                    <th class="col-2"></th>
-                </tr>
-                </thead>
-                <tbody>
-                    <form class="form-inline" method="POST" action="/grade">
-                    <tr class="d-flex">
-                        <td class="col-2">
-                            <select class="browser-default custom-select">
-                                <OPTION VALUE="120208">Fall 2020</OPTION>
-                                <OPTION VALUE="120205">Summer 2020</OPTION>
-                                <OPTION VALUE="120201">Spring 2020</OPTION>
-                                <OPTION VALUE="120200">Winter 2019-2020</OPTION>
-                                <OPTION VALUE="120198">Fall 2019</OPTION>
-                                <OPTION VALUE="120195">Summer 2019</OPTION>
-                                <OPTION VALUE="120191">Spring 2019</OPTION>
-                                <OPTION VALUE="120190">Winter 2018-2019</OPTION>
-                                <OPTION VALUE="120188">Fall 2018</OPTION>
-                                <OPTION VALUE="120185">Summer 2018</OPTION>
-                                <OPTION VALUE="120181">Spring 2018</OPTION>
-                                <OPTION VALUE="120180">Winter 2017-2018</OPTION>
-                                <OPTION VALUE="120178">Fall 2017</OPTION>
-                                <OPTION VALUE="120175">Summer 2017</OPTION>
-                                <OPTION VALUE="120171">Spring 2017</OPTION>
-                                <OPTION VALUE="120170">Winter 2016-2017</OPTION>
-                                <OPTION VALUE="120168">Fall 2016</OPTION>
-                                <OPTION VALUE="120165">Summer 2016</OPTION>
-                                <OPTION VALUE="120161">Spring 2016</OPTION>
-                                <OPTION VALUE="120160">Winter 2015-2016</OPTION>
-                                <OPTION VALUE="120158">Fall 2015</OPTION>
-                                <OPTION VALUE="120155">Summer 2015</OPTION>
-                                <OPTION VALUE="120151">Spring 2015</OPTION>
-                                <OPTION VALUE="120150">Winter 2014-2015</OPTION>
-                                <OPTION VALUE="120148">Fall 2014</OPTION>
-                                <OPTION VALUE="120145">Summer 2014</OPTION>
-                                <OPTION VALUE="120141">Spring 2014</OPTION>
-                                <OPTION VALUE="120138">Fall 2013</OPTION>
-                                <OPTION VALUE="120135">Summer 2013</OPTION>
-                                <OPTION VALUE="120131">Spring 2013</OPTION>
-                                <OPTION VALUE="120128">Fall 2012</OPTION>
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select">
-                                {% for subject in subjects %}
-                                    {% if subject == his_selected_subject %}
-                                        <option value="{{subject}}" selected>{{subject}}</option>
-                                    {% else %}
-                                        <option value="{{subject}}">{{subject}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;">
-                                {% for CRN in CRNs %}
-                                    {% if CRN == his_selected_CRN %}
-                                        <option value="{{CRN}}" selected>{{CRN}}</option>
-                                    {% else %}
-                                        <option value="{{CRN}}">{{CRN}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;"></select>
-                        </td>
-                        <td class="col-2">
-                            <select class="browser-default custom-select" style="width:auto;">
-                                <OPTION VALUE="A+">A+</OPTION>
-                                <OPTION VALUE="A">A</OPTION>
-                                <OPTION VALUE="A-">A-</OPTION>
-                                <OPTION VALUE="B+">B+</OPTION>
-                                <OPTION VALUE="B">B</OPTION>
-                                <OPTION VALUE="B-">B-</OPTION>
-                                <OPTION VALUE="C+">C+</OPTION>
-                                <OPTION VALUE="C">C</OPTION>
-                                <OPTION VALUE="C-">C-</OPTION>
-                                <OPTION VALUE="D+">D+</OPTION>
-                                <OPTION VALUE="D">D</OPTION>
-                                <OPTION VALUE="D-">D-</OPTION>
-                                <OPTION VALUE="W">W</OPTION>
-                                <OPTION VALUE="F">F</OPTION>
-                            </select>
-                        </td>
-                        <td class="col-2">
-                            <button type="button" class="btn btn-primary">Get CRNs</button>
-                            <button type="button" class="btn btn-primary">Get Instructors</button>
-                            <button type="button" class="btn btn-primary">Add</button>
-                        </td>
-                    </tr>
-                    </form>
-                </tbody>
-            </table>
-        </div>
-    </div> -->
     <div class="jumbotron mb-0 bg-info" id="about">
         <h1>About</h1>
         <p>This webapp is made by</p>
