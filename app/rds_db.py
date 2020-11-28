@@ -137,6 +137,17 @@ def check_professor():
     details = cur.fetchall()
     return details
 
+def create_student(email, year, department):
+    cur = conn.cursor()
+    cur.execute("insert into Student(email, class, department) values(%s, %s, %s)", (email, year, department))
+    conn.commit()
+
+def get_student_id(email):
+    cur = conn.cursor()
+    cur.execute("select studentId from Student where email = %s", (email,))
+    details = cur.fetchone()
+    return details[0]
+
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 # newuser = auth.create_user_with_email_and_password('gchoi17@illinois.edu', 'Team107')

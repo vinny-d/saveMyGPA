@@ -23,13 +23,21 @@ config = {
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
-user = auth.current_user
+CONNECTION_STRING = 'mongodb://admin:ForTeam107@cluster0-shard-00-00.skio4.mongodb.net:27017,cluster0-shard-00-01.skio4.mongodb.net:27017,cluster0-shard-00-02.skio4.mongodb.net:27017/<saveMyGpa>?ssl=true&replicaSet=atlas-fvgrlg-shard-0&authSource=admin&retryWrites=true&w=majority'
+client = pymongo.MongoClient(CONNECTION_STRING)
+# print("server version:", client.server_info()["version"])
+mdb = client.get_database('<saveMyGpa>')
+# mongodb connected here
+# print(mdb.list_collection_names())
 
 @app.route('/')
 @app.route('/index')
 def index():
-    subjects = db.get_subjects()
-    return render_template('index.html', subjects=subjects)
+    if auth.current_user:
+        subjects = db.get_subjects()
+        return render_template('index.html', subjects=subjects)
+    else:
+        return redirect('/account')
 
 @app.route('/grade', methods=['POST', 'GET'])
 def grade():
@@ -179,16 +187,19 @@ def register():
 
     try:
         user = auth.create_user_with_email_and_password(email, password)
+        user = auth.sign_in_with_email_and_password(email, password)
+
+        department = request.form['department']
+        year = int(request.form['class'])
+
+        db.create_student(email, year, department)
+        student_id = float(db.get_student_id(email))
+
+        mdb.students.insert({ "studentId": student_id, "courses": [] }, {})
+
         return redirect('/')
     except requests.exceptions.HTTPError as e:
         error_json = e.args[1]
         error = json.loads(error_json)['error']
         print(error)
         return render_template('account.html', reg_error=True, error_message=error['message'])
-
-CONNECTION_STRING = 'mongodb://admin:ForTeam107@cluster0-shard-00-00.skio4.mongodb.net:27017,cluster0-shard-00-01.skio4.mongodb.net:27017,cluster0-shard-00-02.skio4.mongodb.net:27017/<saveMyGpa>?ssl=true&replicaSet=atlas-fvgrlg-shard-0&authSource=admin&retryWrites=true&w=majority'
-client = pymongo.MongoClient(CONNECTION_STRING)
-# print("server version:", client.server_info()["version"])
-mdb = client.get_database('<saveMyGpa>')
-# mongodb connected here
-# print(mdb.list_collection_names())

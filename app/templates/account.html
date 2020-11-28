@@ -20,7 +20,7 @@
                     <input type="text" class="form-control ml-2" id="email_login" name="email">
                     <label for="password_login" class="ml-2">Password:</label>
                     <input type="text" class="form-control ml-2" id="password_login" name="password">
-                    <button type="submit" class="btn btn-primary ml-2 col-auto" id="login">Register</button>
+                    <button type="submit" class="btn btn-primary ml-2 col-auto" id="login">Login</button>
                 </form>
             </div>
             {% if login_error %}
@@ -32,12 +32,21 @@
         <div class="jumbotron mb-0">
             <h5>Register if you don't have an account yet</h5>
             &nbsp;
-            <div class="form-row align-items-center">
-                <form class="form-inline" method="POST" action="/register">
+            <div class="align-items-center">
+                <form class="form-inline" method="POST" action="/register" id="reg-form">
                     <label for="email_reg">Email:</label>
                     <input type="text" class="form-control ml-2" id="email_reg" name="email">
                     <label for="password_reg" class="ml-2">Password:</label>
                     <input type="text" class="form-control ml-2" id="password_reg" name="password">
+                    <label for="department_reg" class="ml-2">Department Code:</label>
+                    <input type="text" class="form-control ml-2" id="department_reg" name="department">
+                    <label for="class_reg" class="ml-2">Class:</label>
+                    <select class="dropdown" aria-labelledby="dropdownMenuButton" id="class_reg" name="class" form="reg-form">
+                        <option class="dropdown-item" value="1">Freshman</option>
+                        <option class="dropdown-item" value="2">Sophomore</option>
+                        <option class="dropdown-item" value="3">Junior</option>
+                        <option class="dropdown-item" value="4">Senior</option>
+                    </select>
                     <button type="submit" class="btn btn-primary ml-2 col-auto" id="register">Register</button>
                 </form>
             </div>

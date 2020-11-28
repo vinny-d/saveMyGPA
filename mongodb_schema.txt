@@ -1,0 +1,63 @@
+"students" collection
+
+{
+    "_id": {
+        "$oid": "string"
+    },
+    "studentId": "int",
+    "courses": [document]
+}
+
+"courses" document template
+
+{
+    "_id": {
+        "$oid": "string"
+    },
+    "courseId": "int",
+    "grade": "string",
+    "professorId": "int",
+    "term": "string"
+}
+
+db.createCollection("students", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["studentId", "courses"],
+         properties: {
+            studentId: {
+               bsonType: "double",
+               description: "required"
+            },
+            courses: {
+                bsonType: "array",
+                minItems: 0,
+                items: {
+                    bsonType: "object",
+                    required: ["courseId", "grade", "professorId", "term"],
+                    properties: {
+                        courseId: {
+                            bsonType: "double",
+                            description: "required"
+                        },
+                        grade: {
+                            bsonType: "string",
+                            description: "required"
+                        },
+                        professorId: {
+                            bsonType: "double",
+                            description: "required"
+                        },
+                        term: {
+                            bsonType: "string",
+                            description: "required"
+                        }
+                    }
+                },
+                description: "required"
+            }
+         }
+      }
+   }
+})
