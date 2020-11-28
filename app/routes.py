@@ -1,11 +1,29 @@
-from flask import render_template, url_for, request
+from flask import render_template, url_for, request, redirect
 from flask_pymongo import pymongo
+import pyrebase
+import requests
+import json
 import sys
 import re
 import os
 import time
 from app import app
 from app import rds_db as db
+
+config = {
+    "apiKey": "AIzaSyAcxxRO8Sqf7m8F9NkUI6-9MPdWrZkYgGs",
+    "authDomain": "savemygpa-7912d.firebaseapp.com",
+    "databaseURL": "https://savemygpa-7912d.firebaseio.com",
+    "projectId": "savemygpa-7912d",
+    "storageBucket": "savemygpa-7912d.appspot.com",
+    "messagingSenderId": "781502539376",
+    "appId": "1:781502539376:web:7618817f841ef51f9b36b5"
+}
+
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+
+user = auth.current_user
 
 @app.route('/')
 @app.route('/index')
@@ -140,15 +158,33 @@ def account():
 
 @app.route('/login', methods=['POST'])
 def login():
-    return
-    # If successful, redirect to the main page and load the user's data on mongodb
-    # If not, send error and stay on the account page
+    print(request.form)
+
+    email = request.form['email']
+    password = request.form['password']
+
+    try:
+        user = auth.sign_in_with_email_and_password(email, password)
+        return redirect('/')
+    except requests.exceptions.HTTPError as e:
+        error_json = e.args[1]
+        error = json.loads(error_json)['error']
+        print(error)
+        return render_template('account.html', login_error=True, error_message=error['message'])
 
 @app.route('/register', methods=['POST'])
 def register():
-    return
-    # If successful, redirect to the main page
-    # If not, send error and stay on the account page
+    email = request.form['email']
+    password = request.form['password']
+
+    try:
+        user = auth.create_user_with_email_and_password(email, password)
+        return redirect('/')
+    except requests.exceptions.HTTPError as e:
+        error_json = e.args[1]
+        error = json.loads(error_json)['error']
+        print(error)
+        return render_template('account.html', reg_error=True, error_message=error['message'])
 
 CONNECTION_STRING = 'mongodb://admin:ForTeam107@cluster0-shard-00-00.skio4.mongodb.net:27017,cluster0-shard-00-01.skio4.mongodb.net:27017,cluster0-shard-00-02.skio4.mongodb.net:27017/<saveMyGpa>?ssl=true&replicaSet=atlas-fvgrlg-shard-0&authSource=admin&retryWrites=true&w=majority'
 client = pymongo.MongoClient(CONNECTION_STRING)

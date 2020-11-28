@@ -11,28 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$(function(){
-    // This is the host for the backend.
-    // TODO: When running Firenotes locally, set to http://localhost:8081. Before
-    // deploying the application to a live production environment, change to
-    // https://backend-dot-<PROJECT_ID>.appspot.com as specified in the
-    // backend's app.yaml file.
-    var backendHostUrl = 'http://localhost:5000';
-  
-    // [START gae_python_firenotes_config]
-    // Obtain the following from the "Add Firebase to your web app" dialogue
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyAcxxRO8Sqf7m8F9NkUI6-9MPdWrZkYgGs",
-        authDomain: "savemygpa-7912d.firebaseapp.com",
-        databaseURL: "https://savemygpa-7912d.firebaseio.com",
-        projectId: "savemygpa-7912d",
-        storageBucket: "savemygpa-7912d.appspot.com",
-        messagingSenderId: "781502539376",
-        appId: "1:781502539376:web:7618817f841ef51f9b36b5"
-    };
-});
+/* REPLACED WITH PYTHON FUNCTIONALITY */
 
+/*
 function signUpWithEmailPassword() {
   var email_reg = document.getElementById('email_reg');
   var password_reg = document.getElementById('password_reg');
@@ -54,8 +35,8 @@ function signUpWithEmailPassword() {
 }
 
 window.onload=function() {
-  var regButton = document.getElementById('register');
-  regButton.addEventListener('click', handler_reg);
+ // var regButton = document.getElementById('register');
+//  regButton.addEventListener('click', handler_reg);
   // You can make something similar like this for the login if you are going to use javascript for authentication
 }
 
@@ -65,3 +46,4 @@ function handler_reg() {
   // @app.route('/register', methods=['GET']) should be changed accordingly 
   // (go back to main page if successful, stay on the account page if not)
 }
+*/
