@@ -35,7 +35,9 @@ mdb = client.get_database('<saveMyGpa>')
 def index():
     if auth.current_user:
         subjects = db.get_subjects()
-        return render_template('index.html', subjects=subjects)
+        student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+
+        return render_template('index.html', records=student['courses'], subjects=subjects)
     else:
         return redirect('/account')
 
@@ -166,8 +168,6 @@ def account():
 
 @app.route('/login', methods=['POST'])
 def login():
-    print(request.form)
-
     email = request.form['email']
     password = request.form['password']
 
@@ -193,9 +193,7 @@ def register():
         year = int(request.form['class'])
 
         db.create_student(email, year, department)
-        student_id = float(db.get_student_id(email))
-
-        mdb.students.insert({ "studentId": student_id, "courses": [] }, {})
+        mdb.students.insert({ "studentEmail": email, "courses": [] }, {})
 
         return redirect('/')
     except requests.exceptions.HTTPError as e:

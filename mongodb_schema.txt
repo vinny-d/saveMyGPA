@@ -4,7 +4,7 @@
     "_id": {
         "$oid": "string"
     },
-    "studentId": "int",
+    "studentEmail": "string",
     "courses": [document]
 }
 
@@ -14,9 +14,10 @@
     "_id": {
         "$oid": "string"
     },
-    "courseId": "int",
+    "courseNumber": "double",
+    "departmentCode": "string",
     "grade": "string",
-    "professorId": "int",
+    "professorName": "string",
     "term": "string"
 }
 
@@ -24,10 +25,10 @@ db.createCollection("students", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["studentId", "courses"],
+         required: ["studentEmail", "courses"],
          properties: {
-            studentId: {
-               bsonType: "double",
+            studentEmail: {
+               bsonType: "string",
                description: "required"
             },
             courses: {
@@ -35,18 +36,22 @@ db.createCollection("students", {
                 minItems: 0,
                 items: {
                     bsonType: "object",
-                    required: ["courseId", "grade", "professorId", "term"],
+                    required: ["courseNumber", "departmentCode", "grade", "professorName", "term"],
                     properties: {
-                        courseId: {
+                        courseNumber: {
                             bsonType: "double",
+                            description: "required"
+                        },
+                        departmentCode: {
+                            bsonType: "string",
                             description: "required"
                         },
                         grade: {
                             bsonType: "string",
                             description: "required"
                         },
-                        professorId: {
-                            bsonType: "double",
+                        professorName: {
+                            bsonType: "string",
                             description: "required"
                         },
                         term: {

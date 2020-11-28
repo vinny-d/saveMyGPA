@@ -22,7 +22,7 @@ firebaseConfig = {
 
 def get_subjects():
     cur = conn.cursor()
-    cur.execute("select departmentCode from Course")
+    cur.execute("select departmentCode from Department")
     details = cur.fetchall()
     details = sorted(set(details))
     subjects = []
@@ -147,15 +147,3 @@ def get_student_id(email):
     cur.execute("select studentId from Student where email = %s", (email,))
     details = cur.fetchone()
     return details[0]
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
-# newuser = auth.create_user_with_email_and_password('gchoi17@illinois.edu', 'Team107')
-user = auth.sign_in_with_email_and_password('gchoi17@illinois.edu', 'Team107')
-
-# print(get_subjects())
-# get_subjects()
-# print(access_data())
-# print(get_CRNs('IS'))
-# get_grade('ECE', 110)
-# print(check_professor())

@@ -50,7 +50,6 @@
             <table class="table">
                 <thead>
                     <tr class="row">
-                        <th style="width: 4%;">#</th>
                         <th class="col-md-2">Term</th>
                         <th class="col-md-2">Subject</th>
                         <th class="col-md-2">Course Number</th>
@@ -63,13 +62,11 @@
                     i.e. each record is an array with the values listed above in the table head -->
                     {% for record in records %}
                         <tr class="row">
-                            <td style="width: 4%;">{{record[0]}}</th>
-                            <td class="col-md-2">{{record[1]}}</th>
-                            <td class="col-md-2">{{record[2]}}</th>
-                            <td class="col-md-2">{{record[3]}}</th>
-                            <td class="col-md-2">{{record[4]}}</th>
-                            <td class="col-md-2">{{record[5]}}</th>
-                            </td>
+                            <td class="col-md-2">{{record['term']}}</td>
+                            <td class="col-md-2">{{record['departmentCode']}}</td>
+                            <td class="col-md-2">{{record['courseNumber']}}</td>
+                            <td class="col-md-2">{{record['professorName']}}</td>
+                            <td class="col-md-2">{{record['grade']}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
