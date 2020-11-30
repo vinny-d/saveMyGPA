@@ -39,7 +39,7 @@ def index():
         subjects = db.get_subjects()
         student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
 
-        return render_template('index.html', records=student['courses'], subjects=subjects)
+        return render_template('index.html', subjects=subjects, records=student['courses'])
     else:
         return redirect('/account')
 
@@ -48,15 +48,19 @@ def grade():
     subjects = db.get_subjects()
     selected_subject = request.form['subject']
     CRNs = db.get_CRNs(selected_subject)
+
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+
     if 'CRN' not in request.form:
-        return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject)
+        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject)
     elif 'CRN' in request.form:
         selected_CRN = request.form['CRN']
         grade = db.get_grade(selected_subject, selected_CRN)
         description = db.get_description(selected_subject, selected_CRN)
         academic_history = student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]['courses']
-
-        return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
+        # return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
+        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
     else:
         return None
 
@@ -65,13 +69,17 @@ def read():
     subjects = db.get_subjects()
     selected_subject = request.form['subject']
     CRNs = db.get_CRNs(selected_subject)
+
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+
     if 'CRN' not in request.form:
-        return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject)
+        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject)
     elif 'CRN' in request.form:
         selected_CRN = request.form['CRN']
         sectionInfos = db.get_sectionInfos(selected_subject, selected_CRN)
         # print(type(selected_CRN), file=sys.stderr)
-        return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, sectionInfos=sectionInfos)
+        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, sectionInfos=sectionInfos)
     else:
         return None
 
@@ -86,20 +94,20 @@ def increment():
     wRes = ""
     if subjectI not in subjects:
         wRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, wRes=wRes)
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)    
     if courseNumberI not in db.get_CRNs(subjectI):
         wRes = "Put correct course number"
-        return render_template('index.html', subjects=subjects, wRes=wRes)
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     if sectionIdI.isnumeric() == False:
         wRes = "Put correct section ID"
-        return render_template('index.html', subjects=subjects, wRes=wRes)
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
     if re.match(termPattern, termI) == None:
         wRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
-        return render_template('index.html', subjects=subjects, wRes=wRes)
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     if gradeI not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         wRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
-        return render_template('index.html', subjects=subjects, wRes=wRes)
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     res = db.increment_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
     if res == 1:
         wRes = "Successfully incremented grade"
@@ -107,7 +115,11 @@ def increment():
         wRes = "Such section does not exist. Change sectionId"
     else:
         wRes = "Such course does not exist. Change subject or course number"
-    return render_template('index.html', subjects=subjects, wRes=wRes)
+    
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+
+    return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
 
 @app.route('/decrement', methods=['POST', 'GET'])
 def decrement():
@@ -120,20 +132,20 @@ def decrement():
     dRes = ""
     if subjectD not in subjects:
         dRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, dRes=dRes)
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)    
     if courseNumberD not in db.get_CRNs(subjectD):
         dRes = "Put correct course number"
-        return render_template('index.html', subjects=subjects, dRes=dRes)
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     if sectionIdD.isnumeric() == False:
         dRes = "Put correct section ID"
-        return render_template('index.html', subjects=subjects, dRes=dRes)
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
     if re.match(termPattern, termD) == None:
         dRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
-        return render_template('index.html', subjects=subjects, dRes=dRes)
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     if gradeD not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         dRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
-        return render_template('index.html', subjects=subjects, dRes=dRes)
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     res = db.decrement_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
     if res == 1:
         dRes = "Successfully decremented grade"
@@ -141,7 +153,11 @@ def decrement():
         dRes = "Such section does not exist. Change sectionId"
     else:
         dRes = "Such course does not exist. Change subject or course number"
-    return render_template('index.html', subjects=subjects, dRes=dRes)
+    
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+
+    return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
 
 @app.route('/addProf', methods=['POST'])
 def addProf():
@@ -150,10 +166,12 @@ def addProf():
     lastName = request.form['profLN']
     if firstName.isalpha() == False or lastName.isalpha() == False:
         apRes = "Put correct name"
-        return render_template('index.html', subjects=subjects, apRes=apRes)
+        return render_template('index.html', subjects=subjects, records=courses, apRes=apRes)
     db.add_professor(firstName, lastName)
     apRes = "Professor successfully added"
-    return render_template('index.html', subjects=subjects, apRes=apRes)
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+    return render_template('index.html', subjects=subjects, records=courses, apRes=apRes)
 
 @app.route('/deleteProf', methods=['POST'])
 def deleteProf():
@@ -162,10 +180,13 @@ def deleteProf():
     lastName = request.form['profLND']
     if firstName.isalpha() == False or lastName.isalpha() == False:
         dpRes = "Put correct name"
-        return render_template('index.html', subjects=subjects, dpRes=dpRes)
+        return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
     db.delete_professor(firstName, lastName)
     dpRes = "Professor successfully deleted"
-    return render_template('index.html', subjects=subjects, dpRes=dpRes)
+
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+    return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
 
 @app.route('/account', methods=['GET'])
 def account():
@@ -206,3 +227,21 @@ def register():
         error = json.loads(error_json)['error']
         print(error)
         return render_template('account.html', reg_error=True, error_message=error['message'])
+
+
+@app.route('/add', methods=['POST'])
+def add():
+    subjects = db.get_subjects()
+    term = request.form['termA']
+    subject = request.form['subjectA']
+    courseNumber = request.form['courseNumberA']
+    instructor = request.form['instructorA']
+    grade = request.form['gradeA']
+
+    print(subject + " " + courseNumber + " " + term + " " + instructor + " " + grade)
+
+    mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$addToSet": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "grade": str(grade), "professorName": str(instructor), "term": str(term)}}})
+    
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+    return render_template('index.html', subjects=subjects, records=courses)
