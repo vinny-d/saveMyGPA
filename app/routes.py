@@ -138,7 +138,7 @@ def decrement():
         dRes = "Such course does not exist. Change subject or course number"
     return render_template('index.html', subjects=subjects, dRes=dRes)
 
-@app.route('/addProf', methods=['GET'])
+@app.route('/addProf', methods=['POST'])
 def addProf():
     subjects = db.get_subjects()
     firstName = request.form['profFN']
@@ -150,7 +150,7 @@ def addProf():
     apRes = "Professor successfully added"
     return render_template('index.html', subjects=subjects, apRes=apRes)
 
-@app.route('/deleteProf', methods=['GET'])
+@app.route('/deleteProf', methods=['POST'])
 def deleteProf():
     subjects = db.get_subjects()
     firstName = request.form['profFND']
@@ -159,7 +159,7 @@ def deleteProf():
         dpRes = "Put correct name"
         return render_template('index.html', subjects=subjects, dpRes=dpRes)
     db.delete_professor(firstName, lastName)
-    dpRes = "Professor successfully added"
+    dpRes = "Professor successfully deleted"
     return render_template('index.html', subjects=subjects, dpRes=dpRes)
 
 @app.route('/account', methods=['GET'])
