@@ -30,6 +30,8 @@ mdb = client.get_database('<saveMyGpa>')
 # mongodb connected here
 # print(mdb.list_collection_names())
 
+term_frequencies = db.build_term_frequencies()
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -55,6 +57,9 @@ def grade():
     elif 'CRN' in request.form:
         selected_CRN = request.form['CRN']
         grade = db.get_grade(selected_subject, selected_CRN)
+        description = db.get_description(selected_subject, selected_CRN)
+        academic_history = student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]['courses']
+        # return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
         return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
     else:
         return None
@@ -104,9 +109,9 @@ def increment():
         wRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     res = db.increment_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
-    if res == 1: 
+    if res == 1:
         wRes = "Successfully incremented grade"
-    elif res == -1: 
+    elif res == -1:
         wRes = "Such section does not exist. Change sectionId"
     else:
         wRes = "Such course does not exist. Change subject or course number"
@@ -142,9 +147,9 @@ def decrement():
         dRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
         return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     res = db.decrement_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
-    if res == 1: 
+    if res == 1:
         dRes = "Successfully decremented grade"
-    elif res == -1: 
+    elif res == -1:
         dRes = "Such section does not exist. Change sectionId"
     else:
         dRes = "Such course does not exist. Change subject or course number"
@@ -178,6 +183,7 @@ def deleteProf():
         return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
     db.delete_professor(firstName, lastName)
     dpRes = "Professor successfully deleted"
+
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
     return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
