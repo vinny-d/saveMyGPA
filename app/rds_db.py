@@ -1,6 +1,7 @@
 import pymysql
 import pyrebase
 import sys
+import string
 
 conn = pymysql.connect(
     host = 'savemygpa.coi7sdcjbaeb.us-east-1.rds.amazonaws.com',
@@ -19,6 +20,26 @@ firebaseConfig = {
     "messagingSenderId": "781502539376",
     "appId": "1:781502539376:web:7618817f841ef51f9b36b5"
 }
+
+def build_term_frequencies():
+    print('Building term frequencies...')
+    cur = conn.cursor()
+    cur.execute('select Course.description from Course;')
+    details = cur.fetchall()
+    term_frequencies = {}
+    for description_tuple in details:
+        course_description = description_tuple[0]
+        for character in course_description:
+            if character in string.punctuation:
+                course_description = course_description.replace(character, "")
+        parsed_description = course_description.lower().split()
+        for word in parsed_description:
+            if word not in term_frequencies:
+                term_frequencies[word] = 1
+            else:
+                term_frequencies[word] += 1
+    print('Completed building term frequencies!')
+    return term_frequencies
 
 def get_subjects():
     cur = conn.cursor()
@@ -67,6 +88,12 @@ def get_grade(deptCode, CRN):
     if num_total:
         avg_grade = round(avg_grade / num_total, 2)
     return avg_grade
+
+def get_description(deptCode, courseNumber):
+    cur = conn.cursor()
+    cur.execute('select Course.description from Course where departmentCode = %s and courseNumber= %s', (deptCode, courseNumber))
+    details = cur.fetchall()
+    return details[0]
 
 def get_sectionInfos(deptCode, CRN):
     cur = conn.cursor()
