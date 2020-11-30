@@ -154,7 +154,7 @@ def decrement():
 
     return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
 
-@app.route('/addProf', methods=['GET'])
+@app.route('/addProf', methods=['POST'])
 def addProf():
     subjects = db.get_subjects()
     firstName = request.form['profFN']
@@ -168,7 +168,7 @@ def addProf():
     courses = student['courses']
     return render_template('index.html', subjects=subjects, records=courses, apRes=apRes)
 
-@app.route('/deleteProf', methods=['GET'])
+@app.route('/deleteProf', methods=['POST'])
 def deleteProf():
     subjects = db.get_subjects()
     firstName = request.form['profFND']
@@ -177,7 +177,7 @@ def deleteProf():
         dpRes = "Put correct name"
         return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
     db.delete_professor(firstName, lastName)
-    dpRes = "Professor successfully added"
+    dpRes = "Professor successfully deleted"
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
     return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
