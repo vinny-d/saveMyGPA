@@ -123,7 +123,9 @@ def read():
             sections = []
             for section in sectionInfos:
                 section_list = list(section)
-                section_list[1] = db.get_professor_name(section_list[1])
+                section_list[1] = section_list[-2] + " " + section_list[-1]
+                section_list.pop(-1)
+                section_list.pop(-1)
                 sections.append(tuple(section_list))
 
             sections = tuple(sections)

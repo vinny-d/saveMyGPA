@@ -105,13 +105,13 @@ def get_sectionInfos(deptCode, CRN):
     if len(details) == 0:
         return None
     # print(details, file=sys.stderr)
-    cur.execute("select * from Section where courseId = %s", details[0][0])
+    cur.execute("select * from Section natural join Professor where courseId = %s", details[0][0])
     sectionInfos = cur.fetchall()
     return sectionInfos
 
 def get_professor_name(id):
     cur = conn.cursor()
-    cur.execute("select firstName, lastName from Professor WHERE professorId =" + str(id))
+    cur.execute("select * from Professor WHERE professorId =" + str(id))
     details = cur.fetchall()
     return details[0][0] + " " + details[0][1]
 
