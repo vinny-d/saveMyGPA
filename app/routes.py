@@ -78,19 +78,30 @@ def grade():
             total_difference = 0
             num_courses = 0
             total_similarity = 0
-            for course in academic_history:
-                course_description = db.get_description(course['departmentCode'], int(course['courseNumber']))
-                course_average = db.get_grade(course['departmentCode'], int(course['courseNumber']))
-                if course_description != None and course['grade'] != 'W':
-                    course_description_word_frequencies = db.build_individual_document_frequency(course_description)
-                    total_difference += (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
-                    total_similarity += get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
-                num_courses += 1
-            if num_courses == 0 or total_similarity == 0:
-                projected_gpa = selected_average
+            if selected_average == 0:
+                total_gpa_points = 0
+                num_courses = 0
+                for course in academic_history:
+                    if course['grade'] != 'W':
+                        num_courses += 1
+                        total_gpa_points += grade_to_gpa(course['grade'])
+                if num_courses == 0:
+                    projected_gpa = 2.0
+                else:
+                    projected_gpa = total_gpa_points / num_courses
             else:
-                projected_gpa = selected_average + total_difference / total_similarity
-            print(projected_gpa, total_difference, total_similarity, num_courses)
+                for course in academic_history:
+                    course_description = db.get_description(course['departmentCode'], int(course['courseNumber']))
+                    course_average = db.get_grade(course['departmentCode'], int(course['courseNumber']))
+                    if course_description != None and course['grade'] != 'W':
+                        course_description_word_frequencies = db.build_individual_document_frequency(course_description)
+                        total_difference += (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
+                        total_similarity += get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
+                    num_courses += 1
+                if num_courses == 0 or total_similarity == 0:
+                    projected_gpa = selected_average
+                else:
+                    projected_gpa = selected_average + total_difference / total_similarity
             return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
         except TypeError:
             return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
