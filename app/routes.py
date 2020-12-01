@@ -1,4 +1,4 @@
-from flask import render_template, url_for, request, redirect
+from flask import render_template, url_for, request, redirect, flash
 from flask_pymongo import pymongo
 import pyrebase
 import requests
@@ -10,6 +10,8 @@ import time
 from app import app
 from app import rds_db as db
 import numpy as np
+
+app.secret_key = "very secret"
 
 config = {
     "apiKey": "AIzaSyAcxxRO8Sqf7m8F9NkUI6-9MPdWrZkYgGs",
@@ -40,7 +42,7 @@ grades = {'A+' : 4.00, 'A' : 4.00, 'A-' : 3.67,
 'F' : 0}
 
 subj_list = []
-f = open("subjects.txt", "r")
+f = open("../subjects.txt", "r")
 for x in f:
     subj_list.append(x.split('|||'))
 f.close()
@@ -275,19 +277,39 @@ def register():
 
 @app.route('/add', methods=['POST'])
 def add():
+    subjects = db.get_subjects()
     term = request.form['termA']
-    subject = request.form['subjectA']
+    subject = request.form['sel_subj']
     courseNumber = request.form['courseNumberA']
     instructor = request.form['instructorA']
     grade = request.form['gradeA']
 
     print(subject + " " + courseNumber + " " + term + " " + instructor + " " + grade)
 
-    mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$addToSet": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "grade": str(grade), "professorName": str(instructor), "term": str(term)}}})
+    existing = mdb.students.find({"studentEmail": auth.current_user['email'], "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "term": str(term)}})
+
+    if len(list(existing)) == 0:
+        mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$addToSet": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "grade": str(grade), "professorName": str(instructor), "term": str(term)}}})
+    else:
+        flash("Error: Course already exists")
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subj_list=subj_list, records=courses)
+
+    return redirect("/")
+
+@app.route('/remove', methods=['POST'])
+def remove():
+    subjects = db.get_subjects()
+    term = request.form['termA']
+    subject = request.form['sel_subj']
+    courseNumber = request.form['courseNumberA']
+
+    mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$pull": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "term": str(term)}}})
+
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
+    return redirect("/")
 
 def grade_to_gpa(grade):
     return grades[grade]

@@ -64,7 +64,7 @@
                         <tr class="row">
                             <td class="col-md-2">{{record['term']}}</td>
                             <td class="col-md-2">{{record['departmentCode']}}</td>
-                            <td class="col-md-2">{{record['courseNumber']}}</td>
+                            <td class="col-md-2">{{record['courseNumber']|int}}</td>
                             <td class="col-md-2">{{record['professorName']}}</td>
                             <td class="col-md-2">{{record['grade']}}</td>
                         </tr>
@@ -92,23 +92,23 @@
                         <tr class="row">
                             <td class="col-0"></td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="termA" placeholder="20xx-te, (te: sp, fa, su, wt)">
+                                <input required type="text" class="form-control" name="termA" placeholder="20xx-te, (te: sp, fa, su, wt)">
                             </td>
                             <td class="col-md-3">
-                                <select name="sel_subj" class="browser-default custom-select" id="subj_id">
+                                <select required name="sel_subj" class="browser-default custom-select" id="subj_id">
                                     {% for subj in subj_list %}
                                         <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
                                     {% endfor %}
                                 </select>
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="courseNumberA" placeholder="3-Digit Course Number e.g.100">
+                                <input required type="text" class="form-control" name="courseNumberA" placeholder="3-Digit Course Number e.g.100">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="instructorA" placeholder="e.g. Steven Pan">
+                                <input required type="text" class="form-control" name="instructorA" placeholder="e.g. Steven Pan">
                             </td>
                             <td class="col-md-1">
-                                <select class="browser-default custom-select mr-2" name="gradeA" style="width:auto;">
+                                <select required class="browser-default custom-select mr-2" name="gradeA" style="width:auto;">
                                     <OPTION VALUE="A+">A+</OPTION>
                                     <OPTION VALUE="A">A</OPTION>
                                     <OPTION VALUE="A-">A-</OPTION>
@@ -127,6 +127,43 @@
                             </td>
                             <td class="col-md-1">
                                 <button type="submit" class="btn btn-primary ml-2">Add</button>
+                            </td>
+                        </tr>
+                    </form>
+                </tbody>
+            </table>
+        </div>
+        <h5>Remove Courses</h5>
+        <div class="table table-sm">
+            <table class="table">
+                <thead>
+                <tr class="row">
+                    <th class="col-0"></th>
+                    <th class="col-sm-2">Term</th>
+                    <th class="col-md-3">Subject</th>
+                    <th class="col-md-2">Course Number</th>
+                    <th class="col-md-1"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <form class="form-inline" method="POST" action="/remove">
+                        <tr class="row">
+                            <td class="col-0"></td>
+                            <td class="col-md-2">
+                                <input required type="text" class="form-control" name="termA" placeholder="20xx-te, (te: sp, fa, su, wt)">
+                            </td>
+                            <td class="col-md-3">
+                                <select required name="sel_subj" class="browser-default custom-select" id="subj_id">
+                                    {% for subj in subj_list %}
+                                        <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="col-md-2">
+                                <input required type="text" class="form-control" name="courseNumberA" placeholder="3-Digit Course Number e.g.100">
+                            </td>
+                            <td class="col-md-1">
+                                <button type="submit" class="btn btn-primary ml-2">Remove</button>
                             </td>
                         </tr>
                     </form>
