@@ -286,7 +286,7 @@ def add():
 
     print(subject + " " + courseNumber + " " + term + " " + instructor + " " + grade)
 
-    existing = mdb.students.find({"studentEmail": auth.current_user['email'], "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "term": str(term)}})
+    existing = mdb.students.find({"studentEmail": auth.current_user['email'], "courses": {"$elemMatch": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "term": str(term)}}})
 
     if len(list(existing)) == 0:
         mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$addToSet": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "grade": str(grade), "professorName": str(instructor), "term": str(term)}}})
