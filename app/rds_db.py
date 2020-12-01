@@ -152,15 +152,25 @@ def delete_professor(firstName, lastName):
     cur.execute("delete from Professor where firstName = %s and lastName = %s", (firstName, lastName))
     conn.commit()
 
+def change_professor(newFirstName, newLastName, oldFirstName, oldLastName, sectionId):
+    cur = conn.cursor()
+    cur.execute("update Section set professorId = (select professorId from Professor where \
+        firstName = %s and lastName = %s) where professorId = (select professorId from \
+            Professor where firstName = %s and lastName = %s) and sectionId = %s", \
+                (newFirstName, newLastName, oldFirstName, oldLastName, sectionId))
+    conn.commit()
+
 def access_data():
     cur = conn.cursor()
-    cur.execute("describe Section")
+    cur.execute("select * from Section where professorId = 9776")
     details = cur.fetchall()
     return details
 
 def check_professor():
     cur = conn.cursor()
-    cur.execute("select * from Professor where firstName = 'Steven' and lastName = 'Pan'")
+    firstName = ""
+    lastName = ""
+    cur.execute("select * from Section where firstName = %s and lastName = %s", (firstName, lastName))
     details = cur.fetchall()
     return details
 
@@ -174,3 +184,7 @@ def get_student_id(email):
     cur.execute("select studentId from Student where email = %s", (email,))
     details = cur.fetchone()
     return details[0]
+
+# print(access_data())
+# testing with (9776, 'Abdussalam A', 'Alawini'), (11505, 'Steven', 'Pan')
+# course (1162, 9776, 3508, '2019-fa', 131, 24, 20, 8, 8, 1, 1, 0, 1, 0, 0, 0, 0)
