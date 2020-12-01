@@ -102,7 +102,7 @@ def grade():
                     projected_gpa = selected_average
                 else:
                     projected_gpa = selected_average + total_difference / total_similarity
-            return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
+            return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
         except TypeError:
             return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
     return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
