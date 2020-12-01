@@ -207,3 +207,15 @@ def build_individual_document_frequency(course_description):
         else:
             document_word_counts[word] += 1
     return document_word_counts
+
+def build_subject_list():
+    list = []     
+    cur = conn.cursor()     
+    cur.execute('SELECT * FROM Department')     
+    details = cur.fetchall()     
+    for tuple in details:         
+        tmplist = []
+        tmplist.append(tuple[0])
+        tmplist.append(tuple[1])
+        list.append(tmplist)
+    return list

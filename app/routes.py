@@ -41,11 +41,7 @@ grades = {'A+' : 4.00, 'A' : 4.00, 'A-' : 3.67,
 'D+' : 1.33, 'D' : 1.00, 'D-' : 0.67,
 'F' : 0}
 
-subj_list = []
-f = open("../subjects.txt", "r")
-for x in f:
-    subj_list.append(x.split('|||'))
-f.close()
+subj_list = db.build_subject_list()
 
 @app.route('/')
 @app.route('/index')
