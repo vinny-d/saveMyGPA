@@ -31,6 +31,7 @@ def build_term_frequencies():
     for description_tuple in details:
         course_description = description_tuple[0]
         parsed_description = tokenize_and_remove_punctuation(course_description)
+        parsed_description = list(set(parsed_description)) # Remove duplicate words.
         for word in parsed_description:
             if word not in term_frequencies:
                 term_frequencies[word] = 1
