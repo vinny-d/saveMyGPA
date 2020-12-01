@@ -75,9 +75,8 @@ def grade():
                 course_average = db.get_grade(course['departmentCode'], int(course['courseNumber']))
                 if course_description != None and course['grade'] != 'W':
                     course_description_word_frequencies = db.build_individual_document_frequency(course_description)
-                    print(course['departmentCode'], int(course['courseNumber']), get_similarity(selected_description_word_frequencies, course_description_word_frequencies),  (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies))
-                    total_difference += (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies)
-                    total_similarity += get_similarity(selected_description_word_frequencies, course_description_word_frequencies)
+                    total_difference += (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
+                    total_similarity += get_similarity(selected_description_word_frequencies, course_description_word_frequencies)**2
                 num_courses += 1
             if num_courses == 0 or total_similarity == 0:
                 projected_gpa = selected_average
