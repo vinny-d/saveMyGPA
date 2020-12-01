@@ -109,6 +109,12 @@ def get_sectionInfos(deptCode, CRN):
     sectionInfos = cur.fetchall()
     return sectionInfos
 
+def get_professor_name(id):
+    cur = conn.cursor()
+    cur.execute("select firstName, lastName from Professor WHERE professorId =" + str(id))
+    details = cur.fetchall()
+    return details[0][0] + " " + details[0][1]
+
 def increment_section(subject, courseNumber, sectionId, term, grade):
     cur = conn.cursor()
     cur.execute("select courseId from Course where departmentCode = %s and courseNumber = %s", (subject, courseNumber))
@@ -187,7 +193,7 @@ def get_student_id(email):
     cur.execute("select studentId from Student where email = %s", (email,))
     details = cur.fetchone()
     return details[0]
-  
+
 # print(access_data())
 # testing with (9776, 'Abdussalam A', 'Alawini'), (11505, 'Steven', 'Pan')
 # course (1162, 9776, 3508, '2019-fa', 131, 24, 20, 8, 8, 1, 1, 0, 1, 0, 0, 0, 0)
@@ -209,11 +215,11 @@ def build_individual_document_frequency(course_description):
     return document_word_counts
 
 def build_subject_list():
-    list = []     
-    cur = conn.cursor()     
-    cur.execute('SELECT * FROM Department')     
-    details = cur.fetchall()     
-    for tuple in details:         
+    list = []
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM Department')
+    details = cur.fetchall()
+    for tuple in details:
         tmplist = []
         tmplist.append(tuple[0])
         tmplist.append(tuple[1])

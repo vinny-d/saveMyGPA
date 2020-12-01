@@ -100,7 +100,6 @@ def grade():
 def read():
     sel_subj = request.form.get('sel_subj')
     CRNs = db.get_CRNs(sel_subj)
-
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
@@ -109,8 +108,15 @@ def read():
     elif 'sel_CRN' in request.form:
         sel_CRN = request.form.get('sel_CRN')
         sectionInfos = db.get_sectionInfos(sel_subj, sel_CRN)
+        sections = []
+        for section in sectionInfos:
+            section_list = list(section)
+            section_list[1] = db.get_professor_name(section_list[1])
+            sections.append(tuple(section_list))
+
+        sections = tuple(sections)
         # print(type(selected_CRN), file=sys.stderr)
-        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, sectionInfos=sectionInfos)
+        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, sectionInfos=sections)
     else:
         return None
 
