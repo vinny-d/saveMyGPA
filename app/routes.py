@@ -91,10 +91,10 @@ def grade():
             else:
                 projected_gpa = selected_average + total_difference / total_similarity
             print(projected_gpa, total_difference, total_similarity, num_courses)
-            return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
+            return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
         except TypeError:
-            return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
-    return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
+            return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
+    return render_template('index.html', subj_list=subj_list, records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
 
 @app.route('/read', methods=['POST', 'GET'])
 def read():
@@ -106,17 +106,20 @@ def read():
     if 'sel_CRN' not in request.form:
         return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj)
     elif 'sel_CRN' in request.form:
-        sel_CRN = request.form.get('sel_CRN')
-        sectionInfos = db.get_sectionInfos(sel_subj, sel_CRN)
-        sections = []
-        for section in sectionInfos:
-            section_list = list(section)
-            section_list[1] = db.get_professor_name(section_list[1])
-            sections.append(tuple(section_list))
+        try:
+            sel_CRN = request.form.get('sel_CRN')
+            sectionInfos = db.get_sectionInfos(sel_subj, sel_CRN)
+            sections = []
+            for section in sectionInfos:
+                section_list = list(section)
+                section_list[1] = db.get_professor_name(section_list[1])
+                sections.append(tuple(section_list))
 
-        sections = tuple(sections)
-        # print(type(selected_CRN), file=sys.stderr)
-        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, sectionInfos=sections)
+            sections = tuple(sections)
+            # print(type(selected_CRN), file=sys.stderr)
+            return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, sectionInfos=sections)
+        except TypeError:
+            return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj)
     else:
         return None
 
