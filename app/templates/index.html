@@ -50,6 +50,7 @@
             <table class="table">
                 <thead>
                     <tr class="row">
+                        <th class="col-0"></th>
                         <th class="col-md-2">Term</th>
                         <th class="col-md-2">Subject</th>
                         <th class="col-md-2">Course Number</th>
@@ -62,6 +63,7 @@
                     i.e. each record is an array with the values listed above in the table head -->
                     {% for record in records %}
                         <tr class="row">
+                            <td class="col-0"></td>
                             <td class="col-md-2">{{record['term']}}</td>
                             <td class="col-md-2">{{record['departmentCode']}}</td>
                             <td class="col-md-2">{{record['courseNumber']|int}}</td>
