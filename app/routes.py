@@ -39,33 +39,43 @@ grades = {'A+' : 4.00, 'A' : 4.00, 'A-' : 3.67,
 'D+' : 1.33, 'D' : 1.00, 'D-' : 0.67,
 'F' : 0}
 
+subj_list = []
+f = open("subjects.txt", "r")
+for x in f:
+    subj_list.append(x.split('|||'))
+f.close()
+
 @app.route('/')
 @app.route('/index')
 def index():
     if auth.current_user:
-        subjects = db.get_subjects()
         student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
 
-        return render_template('index.html', subjects=subjects, records=student['courses'])
+        return render_template('index.html', subj_list=subj_list, records=student['courses'])
     else:
         return redirect('/account')
 
-@app.route('/grade', methods=['POST', 'GET'])
+@app.route('/getCrsNum', methods=['POST'])
+def getCrsNum():
+    sel_subj = request.form.get('sel_subj')
+    CRNs = db.get_CRNs(sel_subj)
+    return render_template('index.html', subj_list=subj_list, sel_subj=sel_subj, CRNs=CRNs)
+
+@app.route('/grade', methods=['POST'])
 def grade():
-    subjects = db.get_subjects()
-    selected_subject = request.form['subject']
-    CRNs = db.get_CRNs(selected_subject)
+    sel_subj = request.form.get('sel_subj')
+    CRNs = db.get_CRNs(sel_subj)
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     academic_history = student['courses']
 
-    if 'CRN' not in request.form:
-        return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject)
-    elif 'CRN' in request.form:
+    if 'sel_CRN' not in request.form:
+        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs)
+    elif 'sel_CRN' in request.form:
         try:
-            selected_CRN = request.form['CRN']
-            selected_average = db.get_grade(selected_subject, selected_CRN)
-            selected_description = db.get_description(selected_subject, selected_CRN)
+            selected_CRN = request.form.get('sel_CRN')
+            selected_average = db.get_grade(sel_subj, selected_CRN)
+            selected_description = db.get_description(sel_subj, selected_CRN)
             selected_description_word_frequencies = db.build_individual_document_frequency(selected_description)
             total_difference = 0
             num_courses = 0
@@ -83,55 +93,56 @@ def grade():
             else:
                 projected_gpa = selected_average + total_difference / total_similarity
             print(projected_gpa, total_difference, total_similarity, num_courses)
-            return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
+            return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=predicted_gpa_to_letter_grade(projected_gpa))
         except TypeError:
-            return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject)
-    return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject)
+            return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
+    return render_template('index.html', records=academic_history, CRNs=CRNs, sel_subj=sel_subj)
 
 @app.route('/read', methods=['POST', 'GET'])
 def read():
-    subjects = db.get_subjects()
-    selected_subject = request.form['subject']
-    CRNs = db.get_CRNs(selected_subject)
+    sel_subj = request.form.get('sel_subj')
+    CRNs = db.get_CRNs(sel_subj)
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
-    if 'CRN' not in request.form:
-        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject)
-    elif 'CRN' in request.form:
-        selected_CRN = request.form['CRN']
-        sectionInfos = db.get_sectionInfos(selected_subject, selected_CRN)
+    if 'sel_CRN' not in request.form:
+        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj)
+    elif 'sel_CRN' in request.form:
+        sel_CRN = request.form.get('sel_CRN')
+        sectionInfos = db.get_sectionInfos(sel_subj, sel_CRN)
         # print(type(selected_CRN), file=sys.stderr)
-        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, sectionInfos=sectionInfos)
+        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, sectionInfos=sectionInfos)
     else:
         return None
 
 @app.route('/increment', methods=['POST', 'GET'])
 def increment():
-    subjects = db.get_subjects()
     subjectI = request.form['subjectI']
     courseNumberI = request.form['courseNumberI']
     sectionIdI = request.form['sectionIdI']
     termI = request.form['termI']
     gradeI = request.form['gradeI']
     wRes = ""
+    subjects = []
+    for x in subj_list:
+        subjects.append(x[0])
     if subjectI not in subjects:
         wRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
     if courseNumberI not in db.get_CRNs(subjectI):
         wRes = "Put correct course number"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
     if sectionIdI.isnumeric() == False:
         wRes = "Put correct section ID"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
     termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
     if re.match(termPattern, termI) == None:
         wRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
     if gradeI not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         wRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
     res = db.increment_section(subjectI, courseNumberI, sectionIdI, termI, gradeI)
     if res == 1:
         wRes = "Successfully incremented grade"
@@ -143,33 +154,35 @@ def increment():
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
-    return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
+    return render_template('index.html', subj_list=subj_list, records=courses, wRes=wRes)
 
 @app.route('/decrement', methods=['POST', 'GET'])
 def decrement():
-    subjects = db.get_subjects()
     subjectD = request.form['subjectD']
     courseNumberD = request.form['courseNumberD']
     sectionIdD = request.form['sectionIdD']
     termD = request.form['termD']
     gradeD = request.form['gradeD']
     dRes = ""
+    subjects = []
+    for x in subj_list:
+        subjects.append(x[0])
     if subjectD not in subjects:
         dRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
     if courseNumberD not in db.get_CRNs(subjectD):
         dRes = "Put correct course number"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
     if sectionIdD.isnumeric() == False:
         dRes = "Put correct section ID"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
     termPattern = re.compile(r'^20..-[fa, sp, su, wt]')
     if re.match(termPattern, termD) == None:
         dRes = "Put correct term (20xx-yy, yy = sp, fa, etc.)"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
     if gradeD not in ['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W']:
         dRes = "Put correct grade ('A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F','W')"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+        return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
     res = db.decrement_section(subjectD, courseNumberD, sectionIdD, termD, gradeD)
     if res == 1:
         dRes = "Successfully decremented grade"
@@ -181,36 +194,43 @@ def decrement():
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
-    return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
+    return render_template('index.html', subj_list=subj_list, records=courses, dRes=dRes)
 
 @app.route('/addProf', methods=['POST'])
 def addProf():
-    subjects = db.get_subjects()
     firstName = request.form['profFN']
     lastName = request.form['profLN']
-    if firstName.isalpha() == False or lastName.isalpha() == False:
-        apRes = "Put correct name"
-        return render_template('index.html', subjects=subjects, records=courses, apRes=apRes)
     db.add_professor(firstName, lastName)
     apRes = "Professor successfully added"
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subjects=subjects, records=courses, apRes=apRes)
+    return render_template('index.html', subj_list=subj_list, apRes=apRes)
 
 @app.route('/deleteProf', methods=['POST'])
 def deleteProf():
-    subjects = db.get_subjects()
     firstName = request.form['profFND']
     lastName = request.form['profLND']
-    if firstName.isalpha() == False or lastName.isalpha() == False:
-        dpRes = "Put correct name"
-        return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
     db.delete_professor(firstName, lastName)
-    dpRes = "Professor successfully deleted"
+    dpRes = "Professor Successfully Deleted"
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subjects=subjects, records=courses, dpRes=dpRes)
+    return render_template('index.html', subj_list=subj_list, dpRes=dpRes)
+
+@app.route('/changeProf', methods=['POST'])
+def changeProf():
+    newFirstName = request.form['newProfF']
+    newLastName = request.form['newProfL']
+    oldFirstName = request.form['oldProfF']
+    oldLastName = request.form['oldProfL']
+    sectionId = request.form['changeSecId']
+    if sectionId.isnumeric() == False:
+        cpRes = "Put Correct Section ID"
+        return render_template('index.html', subj_list=subj_list, cpRes=cpRes)
+    db.change_professor(newFirstName, newLastName, oldFirstName, oldLastName, sectionId)
+    cpRes = "Completed"
+    return render_template('index.html', subj_list=subj_list, cpRes=cpRes)
+
 
 @app.route('/account', methods=['GET'])
 def account():
@@ -255,7 +275,6 @@ def register():
 
 @app.route('/add', methods=['POST'])
 def add():
-    subjects = db.get_subjects()
     term = request.form['termA']
     subject = request.form['subjectA']
     courseNumber = request.form['courseNumberA']
@@ -268,7 +287,7 @@ def add():
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subjects=subjects, records=courses)
+    return render_template('index.html', subj_list=subj_list, records=courses)
 
 def grade_to_gpa(grade):
     return grades[grade]

@@ -46,7 +46,7 @@
     </div>
     <div class="jumbotron mb-0" style="background-color: #ffffff;">
         <h1>Academic History</h1>
-        <div class="table table-sm text-center">
+        <div class="table table-sm">
             <table class="table">
                 <thead>
                     <tr class="row">
@@ -74,13 +74,13 @@
         </div>
         &nbsp;
         <h5>Add Courses</h5>
-        <div class="table table-sm text-center">
+        <div class="table table-sm">
             <table class="table">
                 <thead>
                 <tr class="row">
                     <th class="col-0"></th>
                     <th class="col-sm-2">Term</th>
-                    <th class="col-md-2">Subject</th>
+                    <th class="col-md-3">Subject</th>
                     <th class="col-md-2">Course Number</th>
                     <th class="col-md-2">Instructor</th>
                     <th class="col-md-1">Grade</th>
@@ -94,8 +94,12 @@
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="termA" placeholder="20xx-te, (te: sp, fa, su, wt)">
                             </td>
-                            <td class="col-md-2">
-                                <input type="text" class="form-control" name="subjectA" placeholder="2 to 4 Capitalized Alphabet e.g.CS">
+                            <td class="col-md-3">
+                                <select name="sel_subj" class="browser-default custom-select" id="subj_id">
+                                    {% for subj in subj_list %}
+                                        <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                    {% endfor %}
+                                </select>
                             </td>
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="courseNumberA" placeholder="3-Digit Course Number e.g.100">
@@ -136,41 +140,58 @@
         <div class="table table-sm">
             <table class="table">
                 <thead>
-                <tr class="d-flex">
+                <tr class="row">
                     <th class="col-0"></th>
-                    <th class="col-2">Subject</th>
-                    <th class="col-2">Course Number</th>
+                    <th class="col-3">Subject</th>
+                    <th class="col-3">Course Number</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="d-flex">
-                        <form class="form-inline" method="POST" action="/grade">
-                            <td class="col-0"></td>
-                            <td class="col-2">
-                                <select name="subject" class="browser-default custom-select col-5">
-                                    {% for subject in subjects %}
-                                        {% if subject == selected_subject %}
-                                            <option value="{{subject}}" selected>{{subject}}</option>
-                                        {% else %}
-                                            <option value="{{subject}}">{{subject}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
-                            </td>
-                            <td class="col-2">
-                                <select name="CRN" class="browser-default custom-select col-5">
-                                    {% for CRN in CRNs %}
-                                        {% if CRN == selected_CRN %}
-                                            <option value="{{CRN}}" selected>{{CRN}}</option>
-                                        {% else %}
-                                            <option value="{{CRN}}">{{CRN}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Grade</button>
-                            </td>
-                        </form>
+                    <tr class="row">
+                        {% if sel_subj %}
+                            <form class="form-inline" method="POST" action="/grade">
+                                <td class="col-0"></td>
+                                <td class="col-3">
+                                    <select name="sel_subj" class="browser-default custom-select">
+                                        {% for subj in subj_list %}
+                                            {% if sel_subj == subj[0] %}
+                                                <option value={{subj[0]}} selected>{{subj[1]}} ({{subj[0]}})</option>
+                                            {% else %}
+                                                <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-3">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                        {% for CRN in CRNs %}
+                                            {% if CRN == sel_CRN %}
+                                                <option value="{{CRN}}" selected>{{CRN}}</option>
+                                            {% else %}
+                                                <option value="{{CRN}}">{{CRN}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ml-2 col-auto">Get Grade / Course #</button>
+                                </td>
+                            </form>
+                        {% else %}
+                            <form class="form-inline" method="POST" action="/getCrsNum">
+                                <td class="col-0"></td>
+                                <td class="col-3">
+                                    <select name="sel_subj" class="browser-default custom-select">
+                                        {% for subj in subj_list %}
+                                            <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-3">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
+                                </td>
+                            </form>
+                        {% endif %}
                     </tr>
                 </tbody>
             </table>
@@ -186,41 +207,58 @@
         <div class="table table-sm">
             <table class="table">
                 <thead>
-                <tr class="d-flex">
+                <tr class="row">
                     <th class="col-0"></th>
-                    <th class="col-2">Subject</th>
-                    <th class="col-2">Course Number</th>
+                    <th class="col-3">Subject</th>
+                    <th class="col-3">Course Number</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="d-flex">
-                        <form class="form-inline" method="POST" action="/read">
-                            <td class="col-0"></td>
-                            <td class="col-2">
-                                <select name="subject" class="browser-default custom-select col-5">
-                                    {% for subject in subjects %}
-                                        {% if subject == selected_subject %}
-                                            <option value="{{subject}}" selected>{{subject}}</option>
-                                        {% else %}
-                                            <option value="{{subject}}">{{subject}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
-                            </td>
-                            <td class="col-2">
-                                <select name="CRN" class="browser-default custom-select col-5">
-                                    {% for CRN in CRNs %}
-                                        {% if CRN == selected_CRN %}
-                                            <option value="{{CRN}}" selected>{{CRN}}</option>
-                                        {% else %}
-                                            <option value="{{CRN}}">{{CRN}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="btn btn-primary ml-2 col-auto">Get Sections</button>
-                            </td>
-                        </form>
+                    <tr class="row">
+                        {% if sel_subj %}
+                            <form class="form-inline" method="POST" action="/read">
+                                <td class="col-0"></td>
+                                <td class="col-3">
+                                    <select name="sel_subj" class="browser-default custom-select">
+                                        {% for subj in subj_list %}
+                                            {% if sel_subj == subj[0] %}
+                                                <option value={{subj[0]}} selected>{{subj[1]}} ({{subj[0]}})</option>
+                                            {% else %}
+                                                <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-3">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                        {% for CRN in CRNs %}
+                                            {% if CRN == sel_CRN %}
+                                                <option value="{{CRN}}" selected>{{CRN}}</option>
+                                            {% else %}
+                                                <option value="{{CRN}}">{{CRN}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ml-2 col-auto">Get Section Info / Course #</button>
+                                </td>
+                            </form>
+                        {% else %}
+                            <form class="form-inline" method="POST" action="/getCrsNum">
+                                <td class="col-0"></td>
+                                <td class="col-3">
+                                    <select name="sel_subj" class="browser-default custom-select">
+                                        {% for subj in subj_list %}
+                                            <option value={{subj[0]}}>{{subj[1]}} ({{subj[0]}})</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-3">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
+                                </td>
+                            </form>
+                        {% endif %}
                     </tr>
                 </tbody>
             </table>
@@ -421,7 +459,7 @@
         <div class="table table-sm">
             <table class="table">
                 <thead>
-                <tr class="d-flex">
+                <tr class="row">
                     <th class="col-0"></th>
                     <th class="col-2">First Name</th>
                     <th class="col-2">Last Name</th>
@@ -446,6 +484,49 @@
                 </tbody>
             </table>
             {{dpRes}}
+        </div>
+        &nbsp;
+        <h5>Change Section Professor</h5>
+        <div class="table table-sm">
+            <table class="table">
+                <thead>
+                <tr class="row">
+                    <th class="col-0"></th>
+                    <th class="col-2">First Name (Old)</th>
+                    <th class="col-2">Last Name (Old)</th>
+                    <th class="col-2">First Name (New)</th>
+                    <th class="col-2">Last Name (New)</th>
+                    <th class="col-2">Section ID</th>
+                    <th class="col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="d-flex">
+                        <form class="form-inline" method="POST" action="/changeProf">
+                            <td class="col-0"></td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="oldProfF" placeholder="Changing from">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="oldProfL" placeholder="Changing from">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="newProfF" placeholder="Changing to">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="newProfL" placeholder="Changing to">
+                            </td>
+                            <td class="col-2">
+                                <input type="text" class="form-control" name="changeSecId">
+                            </td>
+                            <td class="col-2">
+                                <button type="submit" class="btn btn-primary ml-2 col-auto">Change</button>
+                            </td>
+                        </form>
+                    </tr>
+                </tbody>
+            </table>
+            {{cpRes}}
         </div>
     </div>
     <div class="jumbotron mb-0 bg-info" id="about">
