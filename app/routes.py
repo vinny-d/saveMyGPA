@@ -9,6 +9,7 @@ import os
 import time
 from app import app
 from app import rds_db as db
+import numpy as np
 
 config = {
     "apiKey": "AIzaSyAcxxRO8Sqf7m8F9NkUI6-9MPdWrZkYgGs",
@@ -30,7 +31,7 @@ mdb = client.get_database('<saveMyGpa>')
 # mongodb connected here
 # print(mdb.list_collection_names())
 
-term_frequencies = db.build_term_frequencies()
+term_frequencies, num_courses = db.build_term_frequencies()
 
 @app.route('/')
 @app.route('/index')
@@ -50,17 +51,33 @@ def grade():
     CRNs = db.get_CRNs(selected_subject)
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
-    courses = student['courses']
+    academic_history = student['courses']
 
     if 'CRN' not in request.form:
-        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject)
+        return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject)
     elif 'CRN' in request.form:
         selected_CRN = request.form['CRN']
-        grade = db.get_grade(selected_subject, selected_CRN)
-        description = db.get_description(selected_subject, selected_CRN)
-        academic_history = student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]['courses']
-        # return render_template('index.html', subjects=subjects, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
-        return render_template('index.html', subjects=subjects, records=courses, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=grade)
+        selected_average = db.get_grade(selected_subject, selected_CRN)
+        selected_description = db.get_description(selected_subject, selected_CRN)
+        selected_description_word_frequencies = db.build_individual_document_frequency(selected_description)
+        total_difference = 0
+        num_courses = 0
+        total_similarity = 0
+        for course in academic_history:
+            course_description = db.get_description(course['departmentCode'], int(course['courseNumber']))
+            course_average = db.get_grade(course['departmentCode'], int(course['courseNumber']))
+            if course_description != None and course['grade'] != 'W':
+                course_description_word_frequencies = db.build_individual_document_frequency(course_description)
+                total_difference += (grade_to_gpa(course['grade']) - course_average) * get_similarity(selected_description_word_frequencies, course_description_word_frequencies)
+                total_similarity += get_similarity(selected_description_word_frequencies, course_description_word_frequencies)
+                print('diff', total_difference, 'sim', total_similarity)
+            num_courses += 1
+        if num_courses == 0 or total_similarity == 0:
+            projected_gpa = selected_average
+        else:
+            projected_gpa = selected_average + total_difference / (total_similarity * num_courses)
+        print(selected_average, projected_gpa)
+        return render_template('index.html', subjects=subjects, records=academic_history, CRNs=CRNs, selected_subject=selected_subject, selected_CRN=selected_CRN, grade=projected_gpa)
     else:
         return None
 
@@ -94,7 +111,7 @@ def increment():
     wRes = ""
     if subjectI not in subjects:
         wRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)    
+        return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
     if courseNumberI not in db.get_CRNs(subjectI):
         wRes = "Put correct course number"
         return render_template('index.html', subjects=subjects, records=courses, wRes=wRes)
@@ -115,7 +132,7 @@ def increment():
         wRes = "Such section does not exist. Change sectionId"
     else:
         wRes = "Such course does not exist. Change subject or course number"
-    
+
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
@@ -132,7 +149,7 @@ def decrement():
     dRes = ""
     if subjectD not in subjects:
         dRes = "Put correct subject"
-        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)    
+        return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
     if courseNumberD not in db.get_CRNs(subjectD):
         dRes = "Put correct course number"
         return render_template('index.html', subjects=subjects, records=courses, dRes=dRes)
@@ -153,7 +170,7 @@ def decrement():
         dRes = "Such section does not exist. Change sectionId"
     else:
         dRes = "Such course does not exist. Change subject or course number"
-    
+
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
@@ -241,7 +258,22 @@ def add():
     print(subject + " " + courseNumber + " " + term + " " + instructor + " " + grade)
 
     mdb.students.update_one({"studentEmail": auth.current_user['email']}, {"$addToSet": { "courses": {"courseNumber": float(courseNumber), "departmentCode": str(subject), "grade": str(grade), "professorName": str(instructor), "term": str(term)}}})
-    
+
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
     return render_template('index.html', subjects=subjects, records=courses)
+
+def grade_to_gpa(grade):
+    grades = {'A+' : 4.00, 'A' : 4.00, 'A-' : 3.67,
+    'B+' : 3.33, 'B' : 3.00, 'B-' : 2.67,
+    'C+' : 2.33, 'C' : 2.00, 'C-' : 1.67,
+    'D+' : 1.33, 'D' : 1.00, 'D-' : 0.67,
+    'F' : 0}
+    return grades[grade]
+
+def get_similarity(course1, course2):
+    similarity = 0
+    for word in course1:
+        if word in course2:
+            similarity += (1 + np.log(course1[word] * course2[word])) * np.log((num_courses + 1) / term_frequencies[word])
+    return similarity

@@ -26,20 +26,19 @@ def build_term_frequencies():
     cur = conn.cursor()
     cur.execute('select Course.description from Course;')
     details = cur.fetchall()
+    num_courses = 0
     term_frequencies = {}
     for description_tuple in details:
         course_description = description_tuple[0]
-        for character in course_description:
-            if character in string.punctuation:
-                course_description = course_description.replace(character, "")
-        parsed_description = course_description.lower().split()
+        parsed_description = tokenize_and_remove_punctuation(course_description)
         for word in parsed_description:
             if word not in term_frequencies:
                 term_frequencies[word] = 1
             else:
                 term_frequencies[word] += 1
+        num_courses += 1
     print('Completed building term frequencies!')
-    return term_frequencies
+    return term_frequencies, num_courses
 
 def get_subjects():
     cur = conn.cursor()
@@ -93,7 +92,10 @@ def get_description(deptCode, courseNumber):
     cur = conn.cursor()
     cur.execute('select Course.description from Course where departmentCode = %s and courseNumber= %s', (deptCode, courseNumber))
     details = cur.fetchall()
-    return details[0]
+    if len(details) != 0:
+        return details[0][0]
+    else:
+        return None
 
 def get_sectionInfos(deptCode, CRN):
     cur = conn.cursor()
@@ -174,3 +176,19 @@ def get_student_id(email):
     cur.execute("select studentId from Student where email = %s", (email,))
     details = cur.fetchone()
     return details[0]
+
+def tokenize_and_remove_punctuation(course_description):
+    for character in course_description:
+        if character in string.punctuation:
+            course_description = course_description.replace(character, "")
+    return course_description.lower().split()
+
+def build_individual_document_frequency(course_description):
+    document_word_counts = {}
+    cleaned_description = tokenize_and_remove_punctuation(course_description)
+    for word in cleaned_description:
+        if word not in document_word_counts:
+            document_word_counts[word] = 1
+        else:
+            document_word_counts[word] += 1
+    return document_word_counts
