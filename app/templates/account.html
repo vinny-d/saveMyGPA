@@ -11,16 +11,26 @@
         <script type=text/javascript src="{{url_for('static', filename='js/account.js') }}"></script>
     </head>
     <body>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-dark h-100" style="background-color: #13294b;">
+                <a class="navbar-brand">
+                    <img class="align-top" src="https://upload.wikimedia.org/wikipedia/commons/9/91/Illinois_Fighting_Illini_logo.svg" width="20px" height="29px" alt="...">
+                    saveMyGpa
+                </a>
+            </nav>
+        </div>
         <div class="jumbotron mb-0 bg-light">
-            <h5>Login with your email</h5>
+            <div class="row align-items-end">
+                <h1>Login</h1>&nbsp;<h5>with your email</h5>
+            </div>
             &nbsp;
-            <div class="form-row align-items-center">
+            <div class="align-items-center" style="white-space:nowrap;">
                 <form class="form-inline" method="POST" action="/login">
                     <label for="email_login">Email:</label>
-                    <input type="text" class="form-control ml-2" id="email_login" name="email">
+                    <input type="text" class="form-control ml-2 col-md-2" id="email_login" name="email">
                     <label for="password_login" class="ml-2">Password:</label>
-                    <input type="password" class="form-control ml-2" id="password_login" name="password">
-                    <button type="submit" class="btn btn-primary ml-2 col-auto" id="login">Login</button>
+                    <input type="password" class="form-control ml-2 col-md-1" id="password_login" name="password">
+                    <button type="submit" class="btn btn-primary ml-3 col-xs-6" id="login">Login</button>
                 </form>
             </div>
             {% if login_error %}
@@ -30,24 +40,26 @@
             {% endif %}
         </div>
         <div class="jumbotron mb-0">
-            <h5>Register if you don't have an account yet</h5>
+            <div class="row align-items-end">
+                <h1>Register</h1>&nbsp;<h5>if you don't have an account yet</h5>
+            </div>
             &nbsp;
             <div class="align-items-center">
                 <form class="form-inline" method="POST" action="/register" id="reg-form">
                     <label for="email_reg">Email:</label>
-                    <input type="text" class="form-control ml-2" id="email_reg" name="email">
+                    <input type="text" class="form-control ml-2 col-md-2" id="email_reg" name="email">
                     <label for="password_reg" class="ml-2">Password:</label>
-                    <input type="password" class="form-control ml-2" id="password_reg" name="password">
+                    <input type="password" class="form-control ml-2 col-md-1" id="password_reg" name="password">
                     <label for="department_reg" class="ml-2">Department Code:</label>
-                    <input type="text" class="form-control ml-2" id="department_reg" name="department">
+                    <input type="text" class="form-control ml-2 col-md-1" id="department_reg" name="department">
                     <label for="class_reg" class="ml-2">Class:</label>
-                    <select class="dropdown" aria-labelledby="dropdownMenuButton" id="class_reg" name="class" form="reg-form">
+                    <select class="dropdown browser-default custom-select ml-2 col-md-2" aria-labelledby="dropdownMenuButton" id="class_reg" name="class" form="reg-form">
                         <option class="dropdown-item" value="1">Freshman</option>
                         <option class="dropdown-item" value="2">Sophomore</option>
                         <option class="dropdown-item" value="3">Junior</option>
                         <option class="dropdown-item" value="4">Senior</option>
                     </select>
-                    <button type="submit" class="btn btn-primary ml-2 col-auto" id="register">Register</button>
+                    <button type="submit" class="btn btn-primary ml-3 col-xs-6" id="register">Register</button>
                 </form>
             </div>
             {% if reg_error %}
