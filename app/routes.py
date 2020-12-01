@@ -62,14 +62,14 @@ def grade():
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
 
-    if 'CRN' not in request.form:
+    if 'sel_CRN' not in request.form:
         return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs)
-    elif 'CRN' in request.form:
-        selected_CRN = request.form['CRN']
-        grade = db.get_grade(sel_subj, selected_CRN)
-        description = db.get_description(sel_subj, selected_CRN)
+    elif 'sel_CRN' in request.form:
+        sel_CRN = request.form['CRN']
+        grade = db.get_grade(sel_subj, sel_CRN)
+        description = db.get_description(sel_subj, sel_CRN)
         academic_history = student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]['courses']
-        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, selected_CRN=selected_CRN, grade=grade)
+        return render_template('index.html', subj_list=subj_list, records=courses, CRNs=CRNs, sel_subj=sel_subj, sel_CRN=sel_CRN, grade=grade)
     else:
         return None
 
@@ -263,5 +263,3 @@ def add():
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
     return render_template('index.html', subj_list=subj_list, records=courses)
-
-  
