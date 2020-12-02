@@ -123,6 +123,8 @@ def read():
             sections = []
             for section in sectionInfos:
                 section_list = list(section)
+                print(section_list)
+                section_list[0], section_list[1] = section_list[1], section_list[0]
                 section_list[1] = section_list[-2] + " " + section_list[-1]
                 section_list.pop(-1)
                 section_list.pop(-1)
