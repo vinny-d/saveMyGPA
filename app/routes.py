@@ -57,7 +57,9 @@ def index():
 def getCrsNum():
     sel_subj = request.form.get('sel_subj')
     CRNs = db.get_CRNs(sel_subj)
-    return render_template('index.html', subj_list=subj_list, sel_subj=sel_subj, CRNs=CRNs)
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    academic_history = student['courses']
+    return render_template('index.html', subj_list=subj_list, sel_subj=sel_subj, CRNs=CRNs, records=academic_history)
 
 @app.route('/grade', methods=['POST'])
 def grade():
@@ -123,7 +125,6 @@ def read():
             sections = []
             for section in sectionInfos:
                 section_list = list(section)
-                print(section_list)
                 section_list[0], section_list[1] = section_list[1], section_list[0]
                 section_list[1] = section_list[-2] + " " + section_list[-1]
                 section_list.pop(-1)
@@ -145,6 +146,8 @@ def increment():
     sectionIdI = request.form['sectionIdI']
     termI = request.form['termI']
     gradeI = request.form['gradeI']
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
     wRes = ""
     subjects = []
     for x in subj_list:
@@ -187,6 +190,8 @@ def decrement():
     gradeD = request.form['gradeD']
     dRes = ""
     subjects = []
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
     for x in subj_list:
         subjects.append(x[0])
     if subjectD not in subjects:
@@ -226,7 +231,7 @@ def addProf():
     apRes = "Professor successfully added"
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subj_list=subj_list, apRes=apRes)
+    return render_template('index.html', subj_list=subj_list, apRes=apRes, records=courses)
 
 @app.route('/deleteProf', methods=['POST'])
 def deleteProf():
@@ -237,10 +242,12 @@ def deleteProf():
 
     student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
     courses = student['courses']
-    return render_template('index.html', subj_list=subj_list, dpRes=dpRes)
+    return render_template('index.html', subj_list=subj_list, dpRes=dpRes, records=courses)
 
 @app.route('/changeProf', methods=['POST'])
 def changeProf():
+    student = mdb.students.find({"studentEmail": auth.current_user['email']})[0]
+    courses = student['courses']
     newFirstName = request.form['newProfF']
     newLastName = request.form['newProfL']
     oldFirstName = request.form['oldProfF']
@@ -248,10 +255,10 @@ def changeProf():
     sectionId = request.form['changeSecId']
     if sectionId.isnumeric() == False:
         cpRes = "Put Correct Section ID"
-        return render_template('index.html', subj_list=subj_list, cpRes=cpRes)
+        return render_template('index.html', subj_list=subj_list, cpRes=cpRes, records=courses)
     db.change_professor(newFirstName, newLastName, oldFirstName, oldLastName, sectionId)
     cpRes = "Completed"
-    return render_template('index.html', subj_list=subj_list, cpRes=cpRes)
+    return render_template('index.html', subj_list=subj_list, cpRes=cpRes, records=courses)
 
 
 @app.route('/account', methods=['GET'])
