@@ -44,7 +44,7 @@
             </div>
         </nav>
     </div>
-    <div class="jumbotron mb-0" style="background-color: #ffffff;">
+    <div class="jumbotron mb-0" style="background-color: aliceblue;">
         <h1>Academic History</h1>
         <div class="table table-sm">
             <table class="table">
@@ -240,7 +240,7 @@
             <input type="text" class="form-control col-sm-1" id="expectedGrade" placeholder="{{grade}}">
         </div>
     </div>
-    <div class="jumbotron mb-0" style="background-color: #afcbff;">
+    <div class="jumbotron mb-0" style="background-color: #D6EAF8;">
         <h1>Database Editor</h1>
         <h5>Read Section Data</h5>
         <div class="table table-sm">
@@ -302,13 +302,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="table table-sm text-center">
+        <div class="table table-sm">
             <table class="table">
                 <thead>
                 <tr class="row">
                     <th class="col-0"></th>
                     <th class="col-sm-1">CourseId</th>
-                    <th class="col-sm-1">ProfName</th>
+                    <th class="col-sm-2">ProfName</th>
                     <th class="col-sm-1">sectionId</th>
                     <th style="width: 8%">Term</th>
                     <th style="width: 4%;">A</th>
@@ -334,7 +334,7 @@
                                 </td>
                                 <td class="col-sm-1">{{sectionInfo[0]}}
                                 </td>
-                                <td class="col-sm-1">{{sectionInfo[1]}}
+                                <td class="col-sm-2">{{sectionInfo[1]}}
                                 </td>
                                 <td class="col-sm-1">{{sectionInfo[2]}}
                                 </td>
@@ -395,16 +395,16 @@
                             <td class="col-0">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="subjectI" placeholder="2 to 4 Capitalized Alphabet e.g.CS">
+                                <input type="text" class="form-control" name="subjectI" placeholder="2 to 4 Capitalized Alphabet">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="courseNumberI" placeholder="3-Digit Course Number e.g.100">
+                                <input type="text" class="form-control" name="courseNumberI" placeholder="3-Digit Course Number">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="sectionIdI" placeholder="4-Digit SectionId (read from above if you don't know)">
+                                <input type="text" class="form-control" name="sectionIdI" placeholder="4-Digit SectionId">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="termI" placeholder="Spring, Fall, etc.">
+                                <input type="text" class="form-control" name="termI" placeholder="20xx-te, te:sp, fa, su, wt">
                             </td>
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="gradeI" placeholder="A, A-, etc.">
@@ -439,16 +439,16 @@
                             <td class="col-0">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="subjectD" placeholder="2 to 4 Capitalized Alphabet e.g.CS">
+                                <input type="text" class="form-control" name="subjectD" placeholder="2 to 4 Capitalized Alphabet">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="courseNumberD" placeholder="3-Digit Course Number e.g.100">
+                                <input type="text" class="form-control" name="courseNumberD" placeholder="3-Digit Course Number">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="sectionIdD" placeholder="4-Digit SectionId (read from above if you don't know)">
+                                <input type="text" class="form-control" name="sectionIdD" placeholder="4-Digit SectionId">
                             </td>
                             <td class="col-md-2">
-                                <input type="text" class="form-control" name="termD" placeholder="Spring, Fall, etc.">
+                                <input type="text" class="form-control" name="termD" placeholder="20xx-te, te:sp, fa, su, wt">
                             </td>
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="gradeD" placeholder="A, A-, etc.">
@@ -535,8 +535,8 @@
                     <th class="col-2">Last Name (Old)</th>
                     <th class="col-2">First Name (New)</th>
                     <th class="col-2">Last Name (New)</th>
-                    <th class="col-2">Section ID</th>
-                    <th class="col-2"></th>
+                    <th class="col-1">Section ID</th>
+                    <th class="col-1"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -555,11 +555,11 @@
                             <td class="col-2">
                                 <input type="text" class="form-control" name="newProfL" placeholder="Changing to">
                             </td>
-                            <td class="col-2">
+                            <td class="col-1">
                                 <input type="text" class="form-control" name="changeSecId">
                             </td>
-                            <td class="col-2">
-                                <button type="submit" class="btn btn-warning ml-2 col-md-5">Change</button>
+                            <td class="col-1">
+                                <button type="submit" class="btn btn-warning ml-2 col-md-10">Change</button>
                             </td>
                         </form>
                     </tr>
@@ -568,7 +568,7 @@
             {{cpRes}}
         </div>
     </div>
-    <div class="jumbotron mb-0 bg-info" id="about">
+    <div class="jumbotron mb-0" style="background-color: #D5F5E3;" id="about">
         <h1>About</h1>
         <p>This webapp is made by</p>
         <table >
