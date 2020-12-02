@@ -55,7 +55,7 @@
                         <th class="col-md-2">Subject</th>
                         <th class="col-md-2">Course Number</th>
                         <th class="col-md-2">Instructor</th>
-                        <th class="col-md-2">Grade</th>
+                        <th class="col-md-1">Grade</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +68,7 @@
                             <td class="col-md-2">{{record['departmentCode']}}</td>
                             <td class="col-md-2">{{record['courseNumber']|int}}</td>
                             <td class="col-md-2">{{record['professorName']}}</td>
-                            <td class="col-md-2">{{record['grade']}}</td>
+                            <td class="col-md-1">{{record['grade']}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -85,8 +85,7 @@
                     <th class="col-md-3">Subject</th>
                     <th class="col-md-2">Course Number</th>
                     <th class="col-md-2">Instructor</th>
-                    <th class="col-md-1">Grade</th>
-                    <th class="col-md-1"></th>
+                    <th class="col-md-2">Grade</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -110,7 +109,7 @@
                                 <input required type="text" class="form-control" name="instructorA" placeholder="e.g. Steven Pan">
                             </td>
                             <td class="col-md-1">
-                                <select required class="browser-default custom-select mr-2" name="gradeA" style="width:auto;">
+                                <select class="browser-default custom-select col-md-10" name="gradeA">
                                     <OPTION VALUE="A+">A+</OPTION>
                                     <OPTION VALUE="A">A</OPTION>
                                     <OPTION VALUE="A-">A-</OPTION>
@@ -182,7 +181,8 @@
                 <tr class="row">
                     <th class="col-0"></th>
                     <th class="col-3">Subject</th>
-                    <th class="col-3">Course Number</th>
+                    <th class="col-1">Course Number</th>
+                    <th class="col-2"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -201,8 +201,8 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="col-3">
-                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                <td class="col-1">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-10">
                                         {% for CRN in CRNs %}
                                             {% if CRN == sel_CRN %}
                                                 <option value="{{CRN}}" selected>{{CRN}}</option>
@@ -211,6 +211,8 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
+                                </td>
+                                <td class="col-2">
                                     <button type="submit" class="btn btn-primary ml-2 col-auto">Get Grade / Course #</button>
                                 </td>
                             </form>
@@ -224,9 +226,11 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="col-3">
-                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                <td class="col-1">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-10">
                                     </select>
+                                </td>
+                                <td class="col-2">
                                     <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
                                 </td>
                             </form>
@@ -249,7 +253,8 @@
                 <tr class="row">
                     <th class="col-0"></th>
                     <th class="col-3">Subject</th>
-                    <th class="col-3">Course Number</th>
+                    <th class="col-1">Course Number</th>
+                    <th class="col-2"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -268,8 +273,8 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="col-3">
-                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                <td class="col-1">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-10">
                                         {% for CRN in CRNs %}
                                             {% if CRN == sel_CRN %}
                                                 <option value="{{CRN}}" selected>{{CRN}}</option>
@@ -278,6 +283,8 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
+                                </td>
+                                <td class="col-2">
                                     <button type="submit" class="btn btn-primary ml-2 col-auto">Get Section Info / Course #</button>
                                 </td>
                             </form>
@@ -291,9 +298,11 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td class="col-3">
-                                    <select name="sel_CRN" class="browser-default custom-select col-md-2">
+                                <td class="col-1">
+                                    <select name="sel_CRN" class="browser-default custom-select col-md-10">
                                     </select>
+                                </td>
+                                <td class="col-2">
                                     <button type="submit" class="btn btn-primary ml-2 col-auto">Get Course #</button>
                                 </td>
                             </form>
@@ -385,7 +394,7 @@
                     <th class="col-md-2">Course Number</th>
                     <th class="col-md-2">SectionId</th>
                     <th class="col-md-2">Term</th>
-                    <th class="col-md-2">Grade</th>
+                    <th class="col-md-1">Grade</th>
                     <th class="col-md-1"></th>
                 </tr>
                 </thead>
@@ -406,7 +415,7 @@
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="termI" placeholder="20xx-te, (te:sp, fa, su, wt)">
                             </td>
-                            <td class="col-md-2">
+                            <td class="col-md-1">
                                 <input type="text" class="form-control" name="gradeI" placeholder="A, A-, etc.">
                             </td>
                             <td class="col-md-1">
@@ -429,7 +438,7 @@
                     <th class="col-md-2">Course Number</th>
                     <th class="col-md-2">SectionId</th>
                     <th class="col-md-2">Term</th>
-                    <th class="col-md-2">Grade</th>
+                    <th class="col-md-1">Grade</th>
                     <th class="col-md-1"></th>
                 </tr>
                 </thead>
@@ -450,7 +459,7 @@
                             <td class="col-md-2">
                                 <input type="text" class="form-control" name="termD" placeholder="20xx-te, (te:sp, fa, su, wt)">
                             </td>
-                            <td class="col-md-2">
+                            <td class="col-md-1">
                                 <input type="text" class="form-control" name="gradeD" placeholder="A, A-, etc.">
                             </td>
                             <td class="col-md-1">
